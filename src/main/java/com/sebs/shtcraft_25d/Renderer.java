@@ -37,5 +37,5 @@ interface Entity
 {
 	/// @return nullable
 	public Point getPosition();
-	
+	///asdfs
 }

@@ -1,14 +1,18 @@
 package com.sebs.shtcraft_25d;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.imageio.ImageIO;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class App extends JPanel implements KeyListener
 {
@@ -151,7 +155,7 @@ public class App extends JPanel implements KeyListener
 			rightPressed = false;
 			break;
 		}
-	}
+	} // hi
 
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -183,7 +187,7 @@ public class App extends JPanel implements KeyListener
 			return size;
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Character Game");
 		App game = new App();
