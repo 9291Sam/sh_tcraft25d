@@ -10,7 +10,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class App extends JPanel implements KeyListener {
+public class App extends JPanel implements KeyListener
+{
 	private int characterX = 100;
 	private int characterY = 100;
 	private final int characterSize = 40;
