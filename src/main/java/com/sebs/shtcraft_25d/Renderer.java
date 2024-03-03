@@ -30,7 +30,6 @@ public class Renderer extends JPanel implements KeyListener
 	
 	private Set<WeakReference<Entity>> entities;
 	private boolean shouldClose;
-	private double deltaTime;
 	private int windowWidthPx, windowHeightPx;
 	
 	public Renderer()
@@ -44,7 +43,7 @@ public class Renderer extends JPanel implements KeyListener
 		addKeyListener(this);
 		
 		this.entities = new HashSet<>();
-		this.deltaTime = 0.016;
+		this.nanosPrev = System.nanoTime();
 	}
 	
 	@Override
@@ -86,9 +85,13 @@ public class Renderer extends JPanel implements KeyListener
 		
 	}
 	
+	private long nanosPrev;
+	
 	public void tickAndDraw()
 	{
-		long nanosBefore = System.nanoTime();
+		long now = System.nanoTime();
+		
+		double deltaTime = (double)(now - this.nanosPrev) / 1e9;
 		
 		for (WeakReference<Entity> e : this.entities)
 		{
@@ -96,20 +99,21 @@ public class Renderer extends JPanel implements KeyListener
 			
 			if (maybeEntity != null)
 			{
-				maybeEntity.tick(this.deltaTime);
+				maybeEntity.tick(deltaTime);
 			}
 		}
 		
+		nanosPrev = now;
+		
 		long nanosAfter = System.nanoTime();
 		
-		this.deltaTime = (double)(nanosAfter - nanosBefore) / 1e9;
 		
 		this.repaint();
 	}
 	
-	public void register(Entity e)
+	public void register(WeakReference<Entity> e)
 	{
-		this.entities.add(new WeakReference<Entity>(e));
+		this.entities.add(e);
 	}
 	
 	public boolean shouldClose()
@@ -166,6 +170,8 @@ public class Renderer extends JPanel implements KeyListener
 	    }
 	}
 	
+	public Set<Entity> strongEntities = new HashSet<>();
+	
 	public static void main(String[] args)
 	{
 		JFrame frame = new JFrame("Shitcraft");
@@ -182,10 +188,13 @@ public class Renderer extends JPanel implements KeyListener
 		
 		Entity e = new TestSquare();
 		
-		renderer.register(e);
+		renderer.strongEntities.add(e);
+		
+		renderer.register(new WeakReference<Entity>(e));
 		
 		while (!renderer.shouldClose())
 		{
+//			e.tick(0.0);
 			renderer.tickAndDraw();
 		}
 		
@@ -193,13 +202,17 @@ public class Renderer extends JPanel implements KeyListener
 	
 	private static class TestSquare implements Renderer.Entity
 	{
+		private double timeAlive = 0.0;
+		
 		@Override
-		public void tick(double deltaTime) {}
+		public void tick(double deltaTime) {
+			this.timeAlive += deltaTime;
+		}
 
 		@Override
 		public void draw(DrawCallCollector d)
-		{			
-			d.drawFilledRectangle(-1.0, -1.0, 2.0, 2.0, Color.CYAN);
+		{					
+			d.drawFilledRectangle(2.0, 2.0 + Math.sin(this.timeAlive), 2.0, 2.0, Color.CYAN);
 		}
 		
 	}
