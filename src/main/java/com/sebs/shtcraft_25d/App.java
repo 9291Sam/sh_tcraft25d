@@ -52,6 +52,7 @@ public class App extends JPanel implements KeyListener
 			}
 		});
 		blastThread.start();
+		
 	}
 
 	@Override
@@ -63,7 +64,7 @@ public class App extends JPanel implements KeyListener
 			g.drawImage(playerImage, characterX, characterY, characterSize, characterSize, null);
 		} else {
 			// is getting called every frame
-			g.setColor(Color.RED);
+			g.setColor(Color.PINK);
 			g.fillRect(characterX, characterY, characterSize, characterSize);
 		}
 		// Draw border
