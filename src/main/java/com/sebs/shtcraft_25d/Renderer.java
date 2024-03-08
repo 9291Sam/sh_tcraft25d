@@ -30,7 +30,7 @@ public class Renderer extends JPanel implements KeyListener
 	
 	private Set<WeakReference<Entity>> entities;
 	private boolean shouldClose;
-	private int windowWidthPx, windowHeightPx;
+	private final int windowWidthPx, windowHeightPx;
 	
 	public Renderer()
 	{
@@ -212,7 +212,7 @@ public class Renderer extends JPanel implements KeyListener
 		@Override
 		public void draw(DrawCallCollector d)
 		{					
-			d.drawFilledRectangle(2.0, 2.0 + Math.sin(this.timeAlive), 2.0, 2.0, Color.CYAN);
+			d.drawFilledRectangle(Math.cos(this.timeAlive), Math.sin(this.timeAlive), 2.0, 2.0, Color.CYAN);
 		}
 		
 	}
