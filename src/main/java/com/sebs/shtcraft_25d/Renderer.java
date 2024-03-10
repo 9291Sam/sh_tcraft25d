@@ -61,6 +61,16 @@ public class Renderer extends JPanel implements KeyListener
 		}
 	}
 	
+	public double getCameraXWorld()
+	{
+		return this.cameraX;
+	}
+	
+	public double getCameraYWorld()
+	{
+		return this.cameraY;
+	}
+	
 	@Override
 	public void paintComponent(Graphics g)
 	{

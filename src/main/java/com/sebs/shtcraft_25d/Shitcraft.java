@@ -15,7 +15,7 @@ public class Shitcraft
 {
 	private Renderer renderer;
 	private TestSquare testSquare;
-	// WorldManager
+	private WorldManager worldManager;
 	// PlayerManager
 	// EntityManager
 	
