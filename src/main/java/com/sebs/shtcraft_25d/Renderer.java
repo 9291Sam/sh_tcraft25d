@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -21,8 +22,10 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.apache.commons.lang3.tuple.Pair;
 import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
 
+import java.util.function.Function;
 public class Renderer extends JPanel implements KeyListener
 {
 	private static final long serialVersionUID = 1L;
@@ -87,6 +90,8 @@ public class Renderer extends JPanel implements KeyListener
 	            .peek(e -> e.draw(callCollector))
 	            .map(WeakReference::new)
 	            .collect(Collectors.toSet());
+	    
+	    callCollector.dispatch();
 	}
 
 	@Override
@@ -157,6 +162,7 @@ public class Renderer extends JPanel implements KeyListener
 		private double cameraX, cameraY;
 		private double cameraWidth, cameraHeight;
 		private double screenPxX, screenPxY;
+		private ArrayList<Pair<Integer, Function<Graphics, Boolean>>> functions;
 		
 		public DrawCallCollector(
 				Graphics newG,
@@ -174,9 +180,11 @@ public class Renderer extends JPanel implements KeyListener
 			this.cameraHeight = newCameraHeight;
 			this.screenPxX = newScreenPxX;
 			this.screenPxY = newScreenPxY;
+			
+			this.functions = new ArrayList<>();
 		}
 
-		 public void drawFilledRectangle(double xWorld, double yWorld, double width, double height, Color color)
+		 public void drawFilledRectangle(double xWorld, double yWorld, Integer layer, double width, double height, Color color)
 		 {
 			 double xScreenPx = Renderer.map(xWorld - this.cameraX, -this.cameraWidth / 2, this.cameraWidth / 2, 0.0, this.screenPxX);
 			 double yScreenPx = Renderer.map(yWorld - this.cameraY, this.cameraHeight / 2, -this.cameraHeight / 2, 0.0, this.screenPxY);
@@ -189,11 +197,19 @@ public class Renderer extends JPanel implements KeyListener
 			    return;
 			 }
 			 
-		 	 this.g.setColor(color);
-		 	 this.g.fillRect((int)xScreenPx, (int)yScreenPx, (int)widthPx, (int)heightPx); 
+			 // thank you java very cool, I love not having ZSTs
+			 Function<Graphics, Boolean> f = (Graphics g) -> 
+			 {
+				 g.setColor(color);
+				 g.fillRect((int)xScreenPx, (int)yScreenPx, (int)widthPx, (int)heightPx); 
+				 
+				 return true;
+			 };
+			 
+			 this.functions.add(Pair.of(layer, f));		 	 
 	    }
 		 
-		 public void drawTexturedRectangle(double xWorld, double yWorld, double width, double height, Image img)
+		 public void drawTexturedRectangle(double xWorld, double yWorld, Integer layer, double width, double height, Image img)
 		 {
 			 double xScreenPx = Renderer.map(xWorld - this.cameraX, -this.cameraWidth / 2, this.cameraWidth / 2, 0.0, this.screenPxX);
 			 double yScreenPx = Renderer.map(yWorld - this.cameraY, this.cameraHeight / 2, -this.cameraHeight / 2, 0.0, this.screenPxY);
@@ -206,9 +222,28 @@ public class Renderer extends JPanel implements KeyListener
 			    return;
 			 }
 			 
-		 	 
-			 this.g.drawImage(img, (int)xScreenPx, (int)yScreenPx, (int)widthPx, (int)heightPx, null);
-	    }
+			 Function<Graphics, Boolean> f = (Graphics g) ->
+			 {
+				 this.g.drawImage(img, (int)xScreenPx, (int)yScreenPx, (int)widthPx, (int)heightPx, null);
+				 
+				 return true;
+			 };
+
+			 this.functions.add(Pair.of(layer, f));
+		 }
+		 
+		 public void dispatch()
+		 {
+			 this.functions.sort((l, r) -> l.getLeft().compareTo(r.getLeft()));
+			 
+			 for (Pair<Integer, Function<Graphics, Boolean>> f : this.functions)
+			 {
+				 Function<Graphics, Boolean> func = f.getRight();
+				 
+				 func.apply(this.g);
+			 }
+		 }
+		 
 	}
 	
 	public Set<Entity> strongEntities = new HashSet<>();

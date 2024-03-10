@@ -39,15 +39,9 @@ public class WorldManager implements Renderer.Entity
 		{
 			for (int j = -10; j < 10; ++j)
 			{
-				d.drawTexturedRectangle((double)i, (double)j, 1.0, 1.0, this.stone);
+				d.drawTexturedRectangle((double)i, (double)j, -1, 1.0, 1.0, this.stone);
 			}
 		}
-//		double cameraX = this.renderer.getCameraXWorld();
-//		double cameraY = this.renderer.getCameraYWorld();
-//		
-//		int left = clamp(-this.widthTiles / 2.0, this.widthTiles / 2, cameraX - )
-		
-		
 	}
 	
 	private enum Tile

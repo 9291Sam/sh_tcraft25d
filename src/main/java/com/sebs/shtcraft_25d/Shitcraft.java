@@ -54,8 +54,8 @@ public class Shitcraft
 		@Override
 		public void draw(DrawCallCollector d)
 		{					
-			d.drawFilledRectangle(Math.cos(this.timeAlive), Math.sin(this.timeAlive), 1.0, 1.0, Color.CYAN);
-			d.drawTexturedRectangle(0.0, 0.0, 1.0, 1.0, this.demo);
+			d.drawFilledRectangle(Math.cos(this.timeAlive), Math.sin(this.timeAlive), 1, 1.0, 1.0, Color.CYAN);
+			d.drawTexturedRectangle(0.0, 0.0, 1, 1.0, 1.0, this.demo);
 		}
 		
 	}
