@@ -78,7 +78,7 @@ public class Shitcraft
 			if (playerImage != null) {
 				double width = 1;
 				double height = 1;
-				d.drawTexturedRectangle(x, y, width, height, playerImage);;
+				d.drawTexturedRectangle(x, y, 1, width, height, playerImage);;
 			}
 		}
 		
