@@ -34,7 +34,7 @@ public class App extends JPanel implements KeyListener
 
 		try {
 			// Load player image from file
-			playerImage = ImageIO.read(new File("C:\\CSE 274 Codes\\CSE201\\src\\player.png"));
+			playerImage = ImageIO.read(new File("demo.jpeg"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

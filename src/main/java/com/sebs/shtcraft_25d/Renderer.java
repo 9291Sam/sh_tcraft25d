@@ -7,12 +7,17 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -29,8 +34,10 @@ public class Renderer extends JPanel implements KeyListener
 	}
 	
 	private Set<WeakReference<Entity>> entities;
+	private Map<Integer, Boolean> isKeyPressed;
 	private boolean shouldClose;
 	private final int windowWidthPx, windowHeightPx;
+	private double cameraX, cameraY;
 	
 	public Renderer()
 	{
@@ -43,7 +50,15 @@ public class Renderer extends JPanel implements KeyListener
 		addKeyListener(this);
 		
 		this.entities = new HashSet<>();
+		this.isKeyPressed = new HashMap<>();
 		this.nanosPrev = System.nanoTime();
+		this.cameraX = 0.0;
+		this.cameraY = 0.0;
+		
+		for (int i = 0; i < 256; ++i)
+		{
+			this.isKeyPressed.put(i, false);
+		}
 	}
 	
 	@Override
@@ -53,7 +68,7 @@ public class Renderer extends JPanel implements KeyListener
 		
 	    DrawCallCollector callCollector = new DrawCallCollector(
 	    		g,  // TODO: sync with screen size!
-	    		0.0, 0.0, 10.0, 10.0, this.windowWidthPx, this.windowHeightPx);
+	    		this.cameraX, this.cameraY, 10.0, 10.0, this.windowWidthPx, this.windowHeightPx);
 
 	    this.entities = 
 	        this.entities.stream()
@@ -65,24 +80,18 @@ public class Renderer extends JPanel implements KeyListener
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e)
-	{
-		// TODO Auto-generated method stub
-		
-	}
+	public void keyTyped(KeyEvent e) {}
 
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
-		// TODO Auto-generated method stub
-		
+		this.isKeyPressed.put(e.getKeyCode(), true);
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e)
 	{
-		// TODO Auto-generated method stub
-		
+		this.isKeyPressed.put(e.getKeyCode(), false);
 	}
 	
 	private long nanosPrev;
@@ -92,6 +101,13 @@ public class Renderer extends JPanel implements KeyListener
 		long now = System.nanoTime();
 		
 		double deltaTime = (double)(now - this.nanosPrev) / 1e9;
+		
+		double cameraMoveSpeed = 5.0;
+		
+		if (this.isKeyPressed.get(KeyEvent.VK_W)) this.cameraY += (cameraMoveSpeed * deltaTime);
+		if (this.isKeyPressed.get(KeyEvent.VK_S)) this.cameraY -= (cameraMoveSpeed * deltaTime);
+		if (this.isKeyPressed.get(KeyEvent.VK_A)) this.cameraX -= (cameraMoveSpeed * deltaTime);
+		if (this.isKeyPressed.get(KeyEvent.VK_D)) this.cameraX += (cameraMoveSpeed * deltaTime);
 		
 		for (WeakReference<Entity> e : this.entities)
 		{
@@ -168,6 +184,24 @@ public class Renderer extends JPanel implements KeyListener
 		 	 this.g.setColor(color);
 		 	 this.g.fillRect((int)xScreenPx, (int)yScreenPx, (int)widthPx, (int)heightPx); 
 	    }
+		 
+		 public void drawTexturedRectangle(double xWorld, double yWorld, double width, double height, Image img)
+		 {
+			 double xScreenPx = Renderer.map(xWorld - this.cameraX, -this.cameraWidth / 2, this.cameraWidth / 2, 0.0, this.screenPxX);
+			 double yScreenPx = Renderer.map(yWorld - this.cameraY, this.cameraHeight / 2, -this.cameraHeight / 2, 0.0, this.screenPxY);
+			 
+			 
+		 	 if (!(0 < xScreenPx && xScreenPx < this.screenPxX &&
+	 			 0 < yScreenPx && yScreenPx < this.screenPxY))
+		 	 {
+	 	 		return;
+		 	 }
+		 	 
+		 	 double widthPx = this.screenPxX * width / this.cameraWidth;
+		 	 double heightPx = this.screenPxY * height / this.cameraHeight;
+		 	 
+			 this.g.drawImage(img, (int)xScreenPx, (int)yScreenPx, (int)widthPx, (int)heightPx, null);
+	    }
 	}
 	
 	public Set<Entity> strongEntities = new HashSet<>();
@@ -194,7 +228,6 @@ public class Renderer extends JPanel implements KeyListener
 		
 		while (!renderer.shouldClose())
 		{
-//			e.tick(0.0);
 			renderer.tickAndDraw();
 		}
 		
@@ -203,6 +236,16 @@ public class Renderer extends JPanel implements KeyListener
 	private static class TestSquare implements Renderer.Entity
 	{
 		private double timeAlive = 0.0;
+		private Image demo;
+		
+		TestSquare()
+		{
+			try {
+				this.demo = ImageIO.read(new File("demo.jpeg"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		@Override
 		public void tick(double deltaTime) {
@@ -212,7 +255,8 @@ public class Renderer extends JPanel implements KeyListener
 		@Override
 		public void draw(DrawCallCollector d)
 		{					
-			d.drawFilledRectangle(Math.cos(this.timeAlive), Math.sin(this.timeAlive), 2.0, 2.0, Color.CYAN);
+			d.drawFilledRectangle(Math.cos(this.timeAlive), Math.sin(this.timeAlive), 1.0, 1.0, Color.CYAN);
+			d.drawTexturedRectangle(0.0, 0.0, 1.0, 1.0, this.demo);
 		}
 		
 	}
