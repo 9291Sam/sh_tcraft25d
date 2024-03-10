@@ -171,16 +171,14 @@ public class Renderer extends JPanel implements KeyListener
 			 double xScreenPx = Renderer.map(xWorld - this.cameraX, -this.cameraWidth / 2, this.cameraWidth / 2, 0.0, this.screenPxX);
 			 double yScreenPx = Renderer.map(yWorld - this.cameraY, this.cameraHeight / 2, -this.cameraHeight / 2, 0.0, this.screenPxY);
 			 
-			 
-		 	 if (!(0 < xScreenPx && xScreenPx < this.screenPxX &&
-	 			 0 < yScreenPx && yScreenPx < this.screenPxY))
-		 	 {
-	 	 		return;
-		 	 }
-		 	 
-		 	 double widthPx = this.screenPxX * width / this.cameraWidth;
+			 double widthPx = this.screenPxX * width / this.cameraWidth;
 		 	 double heightPx = this.screenPxY * height / this.cameraHeight;
-		 	 
+			 
+			 if (xScreenPx <= -widthPx || xScreenPx >= this.screenPxX ||
+			    yScreenPx <= -heightPx || yScreenPx >= this.screenPxY) {
+			    return;
+			 }
+			 
 		 	 this.g.setColor(color);
 		 	 this.g.fillRect((int)xScreenPx, (int)yScreenPx, (int)widthPx, (int)heightPx); 
 	    }
@@ -189,16 +187,15 @@ public class Renderer extends JPanel implements KeyListener
 		 {
 			 double xScreenPx = Renderer.map(xWorld - this.cameraX, -this.cameraWidth / 2, this.cameraWidth / 2, 0.0, this.screenPxX);
 			 double yScreenPx = Renderer.map(yWorld - this.cameraY, this.cameraHeight / 2, -this.cameraHeight / 2, 0.0, this.screenPxY);
-			 
-			 
-		 	 if (!(0 < xScreenPx && xScreenPx < this.screenPxX &&
-	 			 0 < yScreenPx && yScreenPx < this.screenPxY))
-		 	 {
-	 	 		return;
-		 	 }
-		 	 
+
 		 	 double widthPx = this.screenPxX * width / this.cameraWidth;
 		 	 double heightPx = this.screenPxY * height / this.cameraHeight;
+			 
+			 if (xScreenPx <= -widthPx || xScreenPx >= this.screenPxX ||
+			    yScreenPx <= -heightPx || yScreenPx >= this.screenPxY) {
+			    return;
+			 }
+			 
 		 	 
 			 this.g.drawImage(img, (int)xScreenPx, (int)yScreenPx, (int)widthPx, (int)heightPx, null);
 	    }
@@ -211,6 +208,7 @@ public class Renderer extends JPanel implements KeyListener
 		JFrame frame = new JFrame("Shitcraft");
 		
 		Renderer renderer = new Renderer();
+		Shitcraft shitcraft = new Shitcraft(renderer);
 		
 		frame.add(renderer);
 		frame.pack();
@@ -218,48 +216,16 @@ public class Renderer extends JPanel implements KeyListener
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		
-		System.out.println("Hello, World!");
-		
-		Entity e = new TestSquare();
-		
-		renderer.strongEntities.add(e);
-		
-		renderer.register(new WeakReference<Entity>(e));
-		
 		while (!renderer.shouldClose())
 		{
 			renderer.tickAndDraw();
+			
+			// because of Java Things :tm: if we want shitcraft to stay alive, we need to use it 
+			retainer(shitcraft);
 		}
-		
 	}
 	
-	private static class TestSquare implements Renderer.Entity
-	{
-		private double timeAlive = 0.0;
-		private Image demo;
-		
-		TestSquare()
-		{
-			try {
-				this.demo = ImageIO.read(new File("demo.jpeg"));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		@Override
-		public void tick(double deltaTime) {
-			this.timeAlive += deltaTime;
-		}
-
-		@Override
-		public void draw(DrawCallCollector d)
-		{					
-			d.drawFilledRectangle(Math.cos(this.timeAlive), Math.sin(this.timeAlive), 1.0, 1.0, Color.CYAN);
-			d.drawTexturedRectangle(0.0, 0.0, 1.0, 1.0, this.demo);
-		}
-		
-	}
+	private static void retainer(Object o) {}
 }
 
 

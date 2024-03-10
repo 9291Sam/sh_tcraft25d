@@ -14,7 +14,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class App extends JPanel implements KeyListener
+public class Oldgame extends JPanel implements KeyListener
 {
 	private int characterX = 100;
 	private int characterY = 100;
@@ -26,7 +26,7 @@ public class App extends JPanel implements KeyListener
 	private boolean upPressed, downPressed, leftPressed, rightPressed;
 	private BufferedImage playerImage;
 
-	public App() {
+	public Oldgame() {
 		setPreferredSize(new Dimension(400, 400));
 		setBackground(Color.WHITE);
 		setFocusable(true);
@@ -191,7 +191,7 @@ public class App extends JPanel implements KeyListener
 
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Character Game");
-		App game = new App();
+		Oldgame game = new Oldgame();
 		frame.add(game);
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
