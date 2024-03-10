@@ -16,7 +16,7 @@ public class Shitcraft
 	private Renderer renderer;
 	private TestSquare testSquare;
 	private WorldManager worldManager;
-	// PlayerManager
+	private PlayerManager playerManager;
 	// EntityManager
 	
 	
@@ -27,6 +27,44 @@ public class Shitcraft
 		this.testSquare = new TestSquare();
 		
 		renderer.register(new WeakReference<Entity>(this.testSquare));
+	}
+	
+	private static class PlayerManager implements Renderer.Entity
+	{
+		private Image playerImage;
+		private double x;
+		private double y;
+		
+		public static Image loadImage(String filePath) 
+		{
+			File file = new File(filePath);
+			try {
+				return ImageIO.read(file);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		public PlayerManager(Image playerImage, double x, double y) {
+			this.playerImage = playerImage;
+			playerImage = loadImage("PathToFile");
+			this.x = x;
+			this.y = y;
+		}
+
+		@Override
+		public void tick(double deltaTime) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void draw(DrawCallCollector d) {
+			// TODO Auto-generated method stub
+			if (playerImage != null) {
+				
+			}
+		}
+		
 	}
 	
 	private static class TestSquare implements Renderer.Entity
