@@ -42,6 +42,7 @@ public class Shitcraft
 				return ImageIO.read(file);
 			} catch (IOException e) {
 				e.printStackTrace();
+				return(null);
 			}
 		}
 		public PlayerManager(Image playerImage, double x, double y) {
