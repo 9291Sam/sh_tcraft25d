@@ -25,7 +25,7 @@ public class Shitcraft
 		this.renderer = renderer_;
 		
 		this.testSquare = new TestSquare();
-		this.playerManager = new PlayerManager(0.0, 0.0);
+		this.playerManager = new PlayerManager(0.0, 0.0, 2.0);
 		
 		this.worldManager = new WorldManager(this.renderer);
 		
@@ -37,6 +37,11 @@ public class Shitcraft
 	private static class PlayerManager implements Renderer.Entity
 	{
 		private Image playerImage;
+		private double timeAlive = 0.0;
+		private double centerX;
+		private double centerY;
+		private double radius;
+		private double angle;
 		private double x;
 		private double y;
 		
@@ -50,16 +55,21 @@ public class Shitcraft
 				return(null);
 			}
 		}
-		public PlayerManager(double x, double y) {
-			this.playerImage = loadImage("/shtcraft-25d/PixelArtTutorial.png");
-			this.x = x;
-			this.y = y;
+		public PlayerManager(double x, double y, double radius) {
+			this.playerImage = loadImage("PixelArtTutorial.png");
+			this.centerX = x;
+			this.centerY = y;
+			this.angle = 0.0;
+			this.radius = radius;
 		}
 
 		@Override
 		public void tick(double deltaTime) {
 			// TODO Auto-generated method stub
-			
+			this.timeAlive += deltaTime;
+			this.angle += 1.01 * deltaTime;
+			this.x = centerX + Math.cos(angle) * radius;
+			this.y = centerY + Math.sin(angle) * radius;
 		}
 
 		@Override
@@ -68,7 +78,7 @@ public class Shitcraft
 			if (playerImage != null) {
 				double width = 1;
 				double height = 1;
-				d.drawTexturedRectangle(x, y, width, height, playerImage);
+				d.drawTexturedRectangle(x, y, width, height, playerImage);;
 			}
 		}
 		
