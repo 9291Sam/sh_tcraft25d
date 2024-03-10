@@ -26,6 +26,9 @@ public class Shitcraft
 		
 		this.testSquare = new TestSquare();
 		
+		this.worldManager = new WorldManager(this.renderer);
+		
+		renderer.register(new WeakReference<Entity>(this.worldManager));
 		renderer.register(new WeakReference<Entity>(this.testSquare));
 	}
 	
