@@ -163,22 +163,23 @@ public class Renderer extends JPanel implements KeyListener
 	
 	public keyPressed keyPressed (double deltaTime, double cameraMoveSpeed) 
 	{
+		double deltaX = 0;
+		double deltaY = 0;
 		if ((this.isKeyPressed.get(KeyEvent.VK_W))) {
-			this.cameraY += (cameraMoveSpeed * deltaTime);
-			return new keyPressed(cameraX, cameraY);
+			deltaY += (cameraMoveSpeed * deltaTime);
 		}
 		if (this.isKeyPressed.get(KeyEvent.VK_S)) {
-			this.cameraY -= (cameraMoveSpeed * deltaTime);
-			return new keyPressed(cameraX, cameraY);
+			deltaY -= (cameraMoveSpeed * deltaTime);
 		}
 		if (this.isKeyPressed.get(KeyEvent.VK_A)) {
-			this.cameraX -= (cameraMoveSpeed * deltaTime);
-			return new keyPressed(cameraX, cameraY);
+			deltaX -= (cameraMoveSpeed * deltaTime);
 		}
 		if (this.isKeyPressed.get(KeyEvent.VK_D)) {
-			this.cameraX += (cameraMoveSpeed * deltaTime);
-			return new keyPressed(cameraX, cameraY);
+			deltaX += (cameraMoveSpeed * deltaTime);
 		} 
+		
+		this.cameraX += deltaX;
+		this.cameraY += deltaY;
 		
 		return new keyPressed(cameraX, cameraY);
 	}
