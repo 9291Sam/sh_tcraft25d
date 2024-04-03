@@ -34,7 +34,7 @@ public class Shitcraft
 		renderer.register(new WeakReference<Entity>(this.playerManager));
 	}
 	
-	private static class PlayerManager implements Renderer.Entity
+	public static class PlayerManager implements Renderer.Entity
 	{
 		private Image playerImage;
 		private double timeAlive = 0.0;
@@ -42,8 +42,8 @@ public class Shitcraft
 		private double centerY;
 		private double radius;
 		private double angle;
-		private double x;
-		private double y;
+		private static double x;
+		private static double y;
 		
 		public static Image loadImage(String filePath) 
 		{
@@ -82,6 +82,13 @@ public class Shitcraft
 			}
 		}
 		
+		public static double getX() {
+			return x;
+		}
+		
+		public static double getY() {
+			return y;
+		}
 	}
 	
 	private static class TestSquare implements Renderer.Entity

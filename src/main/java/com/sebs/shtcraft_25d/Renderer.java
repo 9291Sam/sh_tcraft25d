@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 
 import org.apache.commons.lang3.tuple.Pair;
 import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
+import com.sebs.shtcraft_25d.Shitcraft.PlayerManager;
 
 import java.util.function.Function;
 public class Renderer extends JPanel implements KeyListener
@@ -129,6 +130,9 @@ public class Renderer extends JPanel implements KeyListener
 			Entity maybeEntity = e.get();
 			
 			if (maybeEntity != null)
+				this.cameraX = PlayerManager.getX();
+				this.cameraY = PlayerManager.getY();
+				
 			{
 				maybeEntity.tick(deltaTime);
 			}
@@ -216,6 +220,7 @@ public class Renderer extends JPanel implements KeyListener
 
 		 	 double widthPx = this.screenPxX * width / this.cameraWidth;
 		 	 double heightPx = this.screenPxY * height / this.cameraHeight;
+		 	 
 			 
 			 if (xScreenPx <= -widthPx || xScreenPx >= this.screenPxX ||
 			    yScreenPx <= -heightPx || yScreenPx >= this.screenPxY) {
