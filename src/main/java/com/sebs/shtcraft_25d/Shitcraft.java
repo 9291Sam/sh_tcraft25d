@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
 import com.sebs.shtcraft_25d.Renderer.Entity;
+import com.sebs.shtcraft_25d.Renderer.keyPressed;
 
 public class Shitcraft
 {
@@ -68,8 +69,8 @@ public class Shitcraft
 			// TODO Auto-generated method stub
 			this.timeAlive += deltaTime;
 			this.angle += 1.01 * deltaTime;
-			this.x = centerX + Math.cos(angle) * radius;
-			this.y = centerY + Math.sin(angle) * radius;
+			this.x = keyPressed.getX();
+			this.y = keyPressed.getY();
 		}
 
 		@Override

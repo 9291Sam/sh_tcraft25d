@@ -120,16 +120,13 @@ public class Renderer extends JPanel implements KeyListener
 		
 		double cameraMoveSpeed = 5.0;
 		
-		if (this.isKeyPressed.get(KeyEvent.VK_W)) this.cameraY += (cameraMoveSpeed * deltaTime);
-		if (this.isKeyPressed.get(KeyEvent.VK_S)) this.cameraY -= (cameraMoveSpeed * deltaTime);
-		if (this.isKeyPressed.get(KeyEvent.VK_A)) this.cameraX -= (cameraMoveSpeed * deltaTime);
-		if (this.isKeyPressed.get(KeyEvent.VK_D)) this.cameraX += (cameraMoveSpeed * deltaTime);
 		
 		for (WeakReference<Entity> e : this.entities)
 		{
 			Entity maybeEntity = e.get();
 			
 			if (maybeEntity != null)
+				keyPressed(deltaTime, cameraMoveSpeed);
 				this.cameraX = PlayerManager.getX();
 				this.cameraY = PlayerManager.getY();
 				
@@ -146,6 +143,46 @@ public class Renderer extends JPanel implements KeyListener
 		this.repaint();
 	}
 	
+	final static class keyPressed {
+		private static double x;
+		private static double y;
+		
+		public keyPressed(double x, double y) {
+			this.x = x;
+			this.y = y;
+		}
+		
+		public static double getX() {
+			return x;
+		}
+		
+		public static double getY() {
+			return y;
+		}
+	}
+	
+	public keyPressed keyPressed (double deltaTime, double cameraMoveSpeed) 
+	{
+		if ((this.isKeyPressed.get(KeyEvent.VK_W))) {
+			this.cameraY += (cameraMoveSpeed * deltaTime);
+			return new keyPressed(cameraX, cameraY);
+		}
+		if (this.isKeyPressed.get(KeyEvent.VK_S)) {
+			this.cameraY -= (cameraMoveSpeed * deltaTime);
+			return new keyPressed(cameraX, cameraY);
+		}
+		if (this.isKeyPressed.get(KeyEvent.VK_A)) {
+			this.cameraX -= (cameraMoveSpeed * deltaTime);
+			return new keyPressed(cameraX, cameraY);
+		}
+		if (this.isKeyPressed.get(KeyEvent.VK_D)) {
+			this.cameraX += (cameraMoveSpeed * deltaTime);
+			return new keyPressed(cameraX, cameraY);
+		} 
+		
+		return new keyPressed(cameraX, cameraY);
+	}
+		
 	public void register(WeakReference<Entity> e)
 	{
 		this.entities.add(e);
