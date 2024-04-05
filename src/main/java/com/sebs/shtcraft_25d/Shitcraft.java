@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
 import com.sebs.shtcraft_25d.Renderer.Entity;
+import com.sebs.shtcraft_25d.Renderer.keyPressed;
 
 public class Shitcraft
 {
@@ -39,7 +40,7 @@ public class Shitcraft
 		renderer.register(new WeakReference<Entity>(this.UIManager));
 	}
 	
-	private static class PlayerManager implements Renderer.Entity
+	public static class PlayerManager implements Renderer.Entity
 	{
 		private Image playerImage;
 		private double timeAlive = 0.0;
@@ -47,8 +48,8 @@ public class Shitcraft
 		private double centerY;
 		private double radius;
 		private double angle;
-		private double x;
-		private double y;
+		private static double x;
+		private static double y;
 		
 		public static Image loadImage(String filePath) 
 		{
@@ -73,8 +74,8 @@ public class Shitcraft
 			// TODO Auto-generated method stub
 			this.timeAlive += deltaTime;
 			this.angle += 1.01 * deltaTime;
-			this.x = centerX + Math.cos(angle) * radius;
-			this.y = centerY + Math.sin(angle) * radius;
+			this.x = keyPressed.getX();
+			this.y = keyPressed.getY();
 		}
 
 		@Override
@@ -87,6 +88,13 @@ public class Shitcraft
 			}
 		}
 		
+		public static double getX() {
+			return x;
+		}
+		
+		public static double getY() {
+			return y;
+		}
 	}
 	
 	private static class TestSquare implements Renderer.Entity
