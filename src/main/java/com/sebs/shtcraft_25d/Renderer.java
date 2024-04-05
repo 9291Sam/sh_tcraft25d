@@ -74,6 +74,14 @@ public class Renderer extends JPanel implements KeyListener
 		return this.cameraY;
 	}
 	
+	public int getWindowWidthPx() {
+	    return this.windowWidthPx;
+	}
+	
+	public int getWindowHeightPx() {
+	    return this.windowHeightPx;
+	}
+	
 	@Override
 	public void paintComponent(Graphics g)
 	{

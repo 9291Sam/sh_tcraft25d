@@ -17,6 +17,8 @@ public class Shitcraft
 	private TestSquare testSquare;
 	private WorldManager worldManager;
 	private PlayerManager playerManager;
+	private TestStatus testStatus;
+	private UIManager UIManager;
 	// EntityManager
 	
 	
@@ -26,12 +28,15 @@ public class Shitcraft
 		
 		this.testSquare = new TestSquare();
 		this.playerManager = new PlayerManager(0.0, 0.0, 2.0);
+		this.testStatus = new TestStatus();
 		
 		this.worldManager = new WorldManager(this.renderer);
+		this.UIManager=new UIManager(this.renderer);
 		
 		renderer.register(new WeakReference<Entity>(this.worldManager));
 		renderer.register(new WeakReference<Entity>(this.testSquare));
 		renderer.register(new WeakReference<Entity>(this.playerManager));
+		renderer.register(new WeakReference<Entity>(this.UIManager));
 	}
 	
 	private static class PlayerManager implements Renderer.Entity
@@ -111,6 +116,25 @@ public class Shitcraft
 		}
 		
 	}
+	
+    private static class TestStatus implements Renderer.Entity
+    {
+        private double timeAlive = 0.0;
+        
+        TestStatus(){}
+        
+        @Override
+        public void tick(double deltaTime) {
+            this.timeAlive += deltaTime;
+        }
+
+        @Override
+        public void draw(DrawCallCollector d)
+        {                   
+            d.drawFilledRectangle(-60, Math.cos(this.timeAlive), 2, 1.0, 1.0, Color.RED);
+        }
+        
+    }
 	
 
 }
