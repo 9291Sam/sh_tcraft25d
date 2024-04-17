@@ -24,9 +24,8 @@ public class SpriteSheetLoader {
 			// Extract each frame from the sprite sheet
 			for (int col = 0; col < numCols; col++) {
 				for (int row = 0; row < numRows; row++) {
-					frames[col][row] = 
-							spriteSheet.getSubimage(col * frameWidth, row * frameHeight, 
-									frameWidth, frameHeight);
+					frames[col][row] = spriteSheet.getSubimage(col * frameWidth, row * frameHeight, frameWidth,
+							frameHeight);
 				}
 			}
 		} catch (IOException e) {
@@ -34,6 +33,12 @@ public class SpriteSheetLoader {
 		}
 	}
 
+	/**
+	 * frames retrieved based on its respective col and row read in by Sprite sheet
+	 * loader
+	 * 
+	 * @return frames
+	 */
 	public BufferedImage[][] getFrames() {
 		return frames;
 	}
