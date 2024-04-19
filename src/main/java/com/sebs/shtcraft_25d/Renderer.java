@@ -25,7 +25,6 @@ import javax.swing.JPanel;
 
 import org.apache.commons.lang3.tuple.Pair;
 import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
-import com.sebs.shtcraft_25d.Shitcraft.PlayerManager;
 
 import java.util.function.Function;
 public class Renderer extends JPanel implements KeyListener
@@ -41,7 +40,7 @@ public class Renderer extends JPanel implements KeyListener
 	private Set<WeakReference<Entity>> entities;
 	private Map<Integer, Boolean> isKeyPressed;
 	private boolean shouldClose;
-	private final int windowWidthPx, windowHeightPx;
+	private int windowWidthPx, windowHeightPx;
 	private double cameraX, cameraY;
 	
 	public Renderer()
@@ -50,8 +49,8 @@ public class Renderer extends JPanel implements KeyListener
 		int width = screenSize.width;
 		int height = screenSize.height;
 		setPreferredSize(new Dimension(width, height));
-		this.windowHeightPx = 600;
-		this.windowWidthPx = 600;
+		this.windowHeightPx = height;
+		this.windowWidthPx = width;
 		
 		setBackground(Color.WHITE);
 		setFocusable(true);
@@ -94,7 +93,7 @@ public class Renderer extends JPanel implements KeyListener
 		
 	    DrawCallCollector callCollector = new DrawCallCollector(
 	    		g,  // TODO: sync with screen size!
-	    		this.cameraX, this.cameraY, 10.0, 10.0, this.windowWidthPx, this.windowHeightPx);
+	    		this.cameraX, this.cameraY, 10.0, 10.0 * (float)(this.windowWidthPx) / this.windowHeightPx, this.windowWidthPx, this.windowHeightPx);
 
 	    this.entities = 
 	        this.entities.stream()
@@ -126,6 +125,13 @@ public class Renderer extends JPanel implements KeyListener
 	
 	public void tickAndDraw()
 	{
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int width = screenSize.width;
+		int height = screenSize.height;
+		setPreferredSize(new Dimension(width, height));
+		this.windowHeightPx = height;
+		this.windowWidthPx = width;
+		
 		long now = System.nanoTime();
 		
 		double deltaTime = (double)(now - this.nanosPrev) / 1e9;
