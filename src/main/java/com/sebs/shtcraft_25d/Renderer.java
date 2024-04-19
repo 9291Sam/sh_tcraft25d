@@ -307,8 +307,6 @@ public class Renderer extends JPanel implements KeyListener
 		 
 	}
 	
-	public Set<Entity> strongEntities = new HashSet<>();
-	
 	public static void main(String[] args)
 	{
 		JFrame frame = new JFrame("Shitcraft");
@@ -329,11 +327,6 @@ public class Renderer extends JPanel implements KeyListener
 			// because of Java Things :tm: if we want shitcraft to stay alive, we need to use it 
 			retainer(shitcraft);
 		}
-	}
-	
-	private void run()
-	{
-		
 	}
 	
 	private static void retainer(Object o) {}
