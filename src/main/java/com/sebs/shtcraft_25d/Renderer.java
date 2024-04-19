@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
@@ -45,7 +46,10 @@ public class Renderer extends JPanel implements KeyListener
 	
 	public Renderer()
 	{
-		setPreferredSize(new Dimension(600, 600));
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int width = screenSize.width;
+		int height = screenSize.height;
+		setPreferredSize(new Dimension(width, height));
 		this.windowHeightPx = 600;
 		this.windowWidthPx = 600;
 		
