@@ -45,12 +45,12 @@ public class Renderer extends JPanel implements KeyListener
 	
 	public Renderer()
 	{
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		int width = screenSize.width;
-		int height = screenSize.height;
-		setPreferredSize(new Dimension(width, height));
-		this.windowHeightPx = height;
-		this.windowWidthPx = width;
+		final int defaultWidth = 600;
+		final int defaultHeight = 600;
+		
+		setPreferredSize(new Dimension(defaultWidth, defaultHeight));
+		this.windowHeightPx = defaultHeight;
+		this.windowWidthPx = defaultWidth;
 		
 		setBackground(Color.WHITE);
 		setFocusable(true);
@@ -89,11 +89,14 @@ public class Renderer extends JPanel implements KeyListener
 	@Override
 	public void paintComponent(Graphics g)
 	{
+		this.windowWidthPx = this.getWidth();
+		this.windowHeightPx = this.getHeight();
+		
 		super.paintComponent(g);
 		
 	    DrawCallCollector callCollector = new DrawCallCollector(
-	    		g,  // TODO: sync with screen size!
-	    		this.cameraX, this.cameraY, 10.0, 10.0 * (float)(this.windowWidthPx) / this.windowHeightPx, this.windowWidthPx, this.windowHeightPx);
+	    		g,
+	    		this.cameraX, this.cameraY, 10.0 * (float)this.windowWidthPx / this.windowHeightPx, 10.0, this.windowWidthPx, this.windowHeightPx);
 
 	    this.entities = 
 	        this.entities.stream()
@@ -124,14 +127,7 @@ public class Renderer extends JPanel implements KeyListener
 	private long nanosPrev;
 	
 	public void tickAndDraw()
-	{
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		int width = screenSize.width;
-		int height = screenSize.height;
-		setPreferredSize(new Dimension(width, height));
-		this.windowHeightPx = height;
-		this.windowWidthPx = width;
-		
+	{		
 		long now = System.nanoTime();
 		
 		double deltaTime = (double)(now - this.nanosPrev) / 1e9;
@@ -232,7 +228,7 @@ public class Renderer extends JPanel implements KeyListener
 				double newCameraHeight,
 				double newScreenPxX,
 				double newScreenPxY)
-		{
+		 {
 			this.g = newG;
 			this.cameraX = newCameraX;
 			this.cameraY = newCameraY;
@@ -242,7 +238,8 @@ public class Renderer extends JPanel implements KeyListener
 			this.screenPxY = newScreenPxY;
 			
 			this.functions = new ArrayList<>();
-		}
+		 }
+		// TODO: make *World and *ScreenSpace
 
 		 public void drawFilledRectangle(double xWorld, double yWorld, Integer layer, double width, double height, Color color)
 		 {
