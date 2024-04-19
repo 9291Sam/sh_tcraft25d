@@ -12,6 +12,8 @@ import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
 import com.sebs.shtcraft_25d.Renderer.Entity;
 import com.sebs.shtcraft_25d.Renderer.keyPressed;
 
+import glm.vec._2.Vec2;
+
 public class Shitcraft
 {
 	private Renderer renderer;
@@ -20,8 +22,7 @@ public class Shitcraft
 	private PlayerManager playerManager;
 	private TestStatus testStatus;
 	private UIManager UIManager;
-	// EntityManager
-	
+	private Zombie zombie;
 	
 	public Shitcraft(Renderer renderer_)
 	{
@@ -32,7 +33,9 @@ public class Shitcraft
 		this.testStatus = new TestStatus();
 		
 		this.worldManager = new WorldManager(this.renderer);
-		this.UIManager=new UIManager(this.renderer);
+		this.UIManager =new UIManager(this.renderer);
+		this.zombie = new Zombie(new Vec2(0.0, 0.0));
+		renderer.register(new WeakReference<Entity>(this.zombie));
 		
 		renderer.register(new WeakReference<Entity>(this.worldManager));
 		renderer.register(new WeakReference<Entity>(this.testSquare));
@@ -122,7 +125,6 @@ public class Shitcraft
 			d.drawFilledRectangle(Math.cos(this.timeAlive), Math.sin(this.timeAlive), 1, 1.0, 1.0, Color.CYAN);
 			d.drawTexturedRectangle(0.0, 0.0, 1, 1.0, 1.0, this.demo);
 		}
-		
 	}
 	
     private static class TestStatus implements Renderer.Entity

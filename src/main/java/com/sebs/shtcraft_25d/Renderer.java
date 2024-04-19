@@ -321,6 +321,11 @@ public class Renderer extends JPanel implements KeyListener
 		}
 	}
 	
+	private void run()
+	{
+		
+	}
+	
 	private static void retainer(Object o) {}
 }
 
