@@ -19,6 +19,7 @@ public class UIManager implements Renderer.Entity
     @Override
     public void draw(DrawCallCollector d)
     {
+    	// TODO: do dynamic things
     	d.drawFilledRectangleScreen(0.0, 0.95, 0, 0.25, 0.1, Color.GRAY);
     	d.drawFilledRectangleScreen(0.025, 0.9675, 1, 0.2, 0.025, Color.RED);
     }

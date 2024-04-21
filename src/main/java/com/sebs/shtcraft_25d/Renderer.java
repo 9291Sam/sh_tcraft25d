@@ -26,6 +26,8 @@ import javax.swing.JPanel;
 import org.apache.commons.lang3.tuple.Pair;
 import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
 
+import glm.vec._2.Vec2;
+
 import java.util.function.Function;
 public class Renderer extends JPanel implements KeyListener
 {
@@ -78,14 +80,6 @@ public class Renderer extends JPanel implements KeyListener
 		return this.cameraY;
 	}
 	
-	public int getWindowWidthPx() {
-	    return this.windowWidthPx;
-	}
-	
-	public int getWindowHeightPx() {
-	    return this.windowHeightPx;
-	}
-	
 	@Override
 	public void paintComponent(Graphics g)
 	{
@@ -132,7 +126,23 @@ public class Renderer extends JPanel implements KeyListener
 		
 		double deltaTime = (double)(now - this.nanosPrev) / 1e9;
 		
-		double cameraMoveSpeed = 5.0;
+		// camera update | TODO: not a great place to be.
+		final double cameraMoveSpeed = 5.0;
+		Vec2 moveVector = new Vec2(0.0, 0.0);
+		
+		moveVector.x += this.isKeyPressed(KeyEvent.VK_A) ? -1.0 : 0.0;
+		moveVector.x += this.isKeyPressed(KeyEvent.VK_D) ? 1.0 : 0.0;
+		moveVector.y += this.isKeyPressed(KeyEvent.VK_W) ? 1.0 : 0.0;
+		moveVector.y += this.isKeyPressed(KeyEvent.VK_S) ? -1.0 : 0.0;
+		
+		// trying to normalize the zero vector isn't a good idea.
+		if (moveVector.x != 0.0 || moveVector.y != 0.0)
+		{
+			moveVector.normalize();
+			
+			this.cameraX += moveVector.x * cameraMoveSpeed * deltaTime;
+			this.cameraY += moveVector.y * cameraMoveSpeed * deltaTime;
+		}
 		
 		
 		for (WeakReference<Entity> e : this.entities)
@@ -140,62 +150,21 @@ public class Renderer extends JPanel implements KeyListener
 			Entity maybeEntity = e.get();
 			
 			if (maybeEntity != null)
-				keyPressed(deltaTime, cameraMoveSpeed);
-				this.cameraX = PlayerManager.getX();
-				this.cameraY = PlayerManager.getY();
-				
 			{
 				maybeEntity.tick(deltaTime);
 			}
 		}
-		
+	
 		nanosPrev = now;
-		
-		long nanosAfter = System.nanoTime();
 		
 		
 		this.repaint();
 	}
 	
-	final static class keyPressed {
-		private static double x;
-		private static double y;
-		
-		public keyPressed(double x, double y) {
-			this.x = x;
-			this.y = y;
-		}
-		
-		public static double getX() {
-			return x;
-		}
-		
-		public static double getY() {
-			return y;
-		}
-	}
-	
-	public keyPressed keyPressed (double deltaTime, double cameraMoveSpeed) 
+	// this int represents a KeyEvent.getCode()
+	public boolean isKeyPressed(int k) 
 	{
-		double deltaX = 0;
-		double deltaY = 0;
-		if ((this.isKeyPressed.get(KeyEvent.VK_W))) {
-			deltaY += (cameraMoveSpeed * deltaTime);
-		}
-		if (this.isKeyPressed.get(KeyEvent.VK_S)) {
-			deltaY -= (cameraMoveSpeed * deltaTime);
-		}
-		if (this.isKeyPressed.get(KeyEvent.VK_A)) {
-			deltaX -= (cameraMoveSpeed * deltaTime);
-		}
-		if (this.isKeyPressed.get(KeyEvent.VK_D)) {
-			deltaX += (cameraMoveSpeed * deltaTime);
-		} 
-		
-		this.cameraX += deltaX;
-		this.cameraY += deltaY;
-		
-		return new keyPressed(cameraX, cameraY);
+		return this.isKeyPressed.get(Integer.valueOf(k));
 	}
 		
 	public void register(WeakReference<Entity> e)
