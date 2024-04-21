@@ -126,18 +126,6 @@ public class Renderer extends JPanel implements KeyListener
 		
 		double deltaTime = (double)(now - this.nanosPrev) / 1e9;
 		
-		for (WeakReference<Entity> e : this.entities)
-		{
-			Entity maybeEntity = e.get();
-			
-			if (maybeEntity != null)
-			{
-				maybeEntity.tick(deltaTime);
-			}
-		}
-		
-		
-		
 		// camera update | TODO: not a great place to be.
 		final double cameraMoveSpeed = 5.0;
 		Vec2 moveVector = new Vec2(0.0, 0.0);
@@ -156,6 +144,17 @@ public class Renderer extends JPanel implements KeyListener
 			this.cameraY += moveVector.y * cameraMoveSpeed * deltaTime;
 		}
 		
+		
+		for (WeakReference<Entity> e : this.entities)
+		{
+			Entity maybeEntity = e.get();
+			
+			if (maybeEntity != null)
+			{
+				maybeEntity.tick(deltaTime);
+			}
+		}
+	
 		nanosPrev = now;
 		
 		
