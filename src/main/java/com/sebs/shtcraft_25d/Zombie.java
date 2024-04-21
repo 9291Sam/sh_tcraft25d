@@ -86,7 +86,7 @@ public class Zombie implements Renderer.Entity
 		Vec2 toGoal = this.prev.sub(this.goal);
 		toGoal = toGoal.normalize();
 		
-		d.drawFilledRectangle(
+		d.drawFilledRectangleWorld(
 				this.prev.x + toGoal.x * this.t,
 				this.prev.y + toGoal.y * this.t,
 				1, 1.0, 1.0, Color.RED);

@@ -240,8 +240,43 @@ public class Renderer extends JPanel implements KeyListener
 			this.functions = new ArrayList<>();
 		 }
 		// TODO: make *World and *ScreenSpace
+		// takes in normalized coordinates 
+		public void drawFilledRectangleScreen(double xScreen, double yScreen, Integer layer, double width, double height, Color color)
+		{
+			Function<Graphics, Boolean> f = (Graphics g) -> 
+			{
+				g.setColor(color);
+				g.fillRect(
+					(int)(xScreen * this.screenPxX),
+					(int)(yScreen * this.screenPxY),
+					(int)(width * this.screenPxX),
+					(int)(height * this.screenPxY)
+				); 
+				 
+				return true;
+			};
+			 
+			this.functions.add(Pair.of(layer, f));		
+		}
+		
+		public void drawTexturedRectangleScreen(double xScreen, double yScreen, Integer layer, double width, double height, Image img)
+		{
+			Function<Graphics, Boolean> f = (Graphics g) ->
+			{
+				g.drawImage(img, 
+					(int)(xScreen * this.screenPxX),
+					(int)(yScreen * this.screenPxY),
+					(int)(width * this.screenPxX),
+					(int)(height * this.screenPxY),
+					null);
+				 
+				return true;
+			};
+			 
+			this.functions.add(Pair.of(layer, f));		
+		}
 
-		 public void drawFilledRectangle(double xWorld, double yWorld, Integer layer, double width, double height, Color color)
+		 public void drawFilledRectangleWorld(double xWorld, double yWorld, Integer layer, double width, double height, Color color)
 		 {
 			 double xScreenPx = Renderer.map(xWorld - this.cameraX, -this.cameraWidth / 2, this.cameraWidth / 2, 0.0, this.screenPxX);
 			 double yScreenPx = Renderer.map(yWorld - this.cameraY, this.cameraHeight / 2, -this.cameraHeight / 2, 0.0, this.screenPxY);
@@ -266,7 +301,7 @@ public class Renderer extends JPanel implements KeyListener
 			 this.functions.add(Pair.of(layer, f));		 	 
 	    }
 		 
-		 public void drawTexturedRectangle(double xWorld, double yWorld, Integer layer, double width, double height, Image img)
+		 public void drawTexturedRectangleWorld(double xWorld, double yWorld, Integer layer, double width, double height, Image img)
 		 {
 			 double xScreenPx = Renderer.map(xWorld - this.cameraX, -this.cameraWidth / 2, this.cameraWidth / 2, 0.0, this.screenPxX);
 			 double yScreenPx = Renderer.map(yWorld - this.cameraY, this.cameraHeight / 2, -this.cameraHeight / 2, 0.0, this.screenPxY);

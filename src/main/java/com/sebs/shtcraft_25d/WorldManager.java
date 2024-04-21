@@ -39,7 +39,7 @@ public class WorldManager implements Renderer.Entity
 		{
 			for (int j = -10; j < 10; ++j)
 			{
-				d.drawTexturedRectangle((double)i, (double)j, -1, 1.0, 1.0, this.stone);
+				d.drawTexturedRectangleWorld((double)i, (double)j, -1, 1.0, 1.0, this.stone);
 			}
 		}
 	}

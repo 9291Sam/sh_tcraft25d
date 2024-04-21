@@ -19,7 +19,6 @@ public class Shitcraft
 	private TestSquare testSquare;
 	private WorldManager worldManager;
 	private PlayerManager playerManager;
-	private TestStatus testStatus;
 	private UIManager UIManager;
 	private Zombie zombie;
 	
@@ -29,7 +28,6 @@ public class Shitcraft
 		
 		this.testSquare = new TestSquare();
 		this.playerManager = new PlayerManager(0.0, 0.0, 2.0);
-		this.testStatus = new TestStatus();
 		
 		this.worldManager = new WorldManager(this.renderer);
 		this.UIManager =new UIManager(this.renderer);
@@ -64,29 +62,29 @@ public class Shitcraft
 		@Override
 		public void draw(DrawCallCollector d)
 		{					
-			d.drawFilledRectangle(Math.cos(this.timeAlive), Math.sin(this.timeAlive), 1, 1.0, 1.0, Color.CYAN);
-			d.drawTexturedRectangle(0.0, 0.0, 1, 1.0, 1.0, this.demo);
+			d.drawFilledRectangleWorld(Math.cos(this.timeAlive), Math.sin(this.timeAlive), 1, 1.0, 1.0, Color.CYAN);
+			d.drawTexturedRectangleWorld(0.0, 0.0, 1, 1.0, 1.0, this.demo);
 		}
 	}
 	
-    private static class TestStatus implements Renderer.Entity
-    {
-        private double timeAlive = 0.0;
-        
-        TestStatus(){}
-        
-        @Override
-        public void tick(double deltaTime) {
-            this.timeAlive += deltaTime;
-        }
-
-        @Override
-        public void draw(DrawCallCollector d)
-        {                   
-            d.drawFilledRectangle(-60, Math.cos(this.timeAlive), 2, 1.0, 1.0, Color.RED);
-        }
-        
-    }
+//    private static class TestStatus implements Renderer.Entity
+//    {
+//        private double timeAlive = 0.0;
+//        
+//        TestStatus(){}
+//        
+//        @Override
+//        public void tick(double deltaTime) {
+//            this.timeAlive += deltaTime;
+//        }
+//
+//        @Override
+//        public void draw(DrawCallCollector d)
+//        {                   
+//            d.drawFilledRectangle(-60, Math.cos(this.timeAlive), 2, 1.0, 1.0, Color.RED);
+//        }
+//        
+//    }
 	
 
 }
