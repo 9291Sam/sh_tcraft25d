@@ -53,7 +53,7 @@ public class PlayerManager implements Renderer.Entity
 		if (playerImage != null) {
 			double width = 1;
 			double height = 1;
-			d.drawTexturedRectangle(x, y, 1, width, height, playerImage);;
+			d.drawTexturedRectangleWorld(x, y, 1, width, height, playerImage);;
 		}
 	}
 	
