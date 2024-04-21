@@ -61,7 +61,6 @@ public class Zombie implements Renderer.Entity
 		{
 		case Randomize:
 			this.state = State.Travel;
-			System.out.println("zombie tick " + this.toString());
 			break;
 			
 		case Travel:
