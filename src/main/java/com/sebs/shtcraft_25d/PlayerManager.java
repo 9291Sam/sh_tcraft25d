@@ -16,20 +16,11 @@ public class PlayerManager implements Renderer.Entity
 	double playerX;
 	double playerY;
 	
-	public static Image loadImage(String filePath) 
-	{
-		File file = new File(filePath);
-		try {
-			return ImageIO.read(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return(null);
-		}
-	}
+	
 	
 	public PlayerManager(Renderer renderer_)
 	{
-		this.playerImage = loadImage("PixelArtTutorial.png");
+		this.playerImage = Utils.loadImage("PixelArtTutorial.png");
 		this.renderer = renderer_;
 		
 		this.playerX = 0.0;
