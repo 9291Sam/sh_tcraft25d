@@ -27,7 +27,7 @@ public class Shitcraft
 		this.renderer = renderer_;
 		
 		this.testSquare = new TestSquare();
-		this.playerManager = new PlayerManager(0.0, 0.0, 2.0);
+		this.playerManager = new PlayerManager(this.renderer);
 		
 		this.worldManager = new WorldManager(this.renderer);
 		this.UIManager =new UIManager(this.renderer);

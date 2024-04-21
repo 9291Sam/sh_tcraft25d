@@ -7,18 +7,14 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
-import com.sebs.shtcraft_25d.Renderer.keyPressed;
 
 public class PlayerManager implements Renderer.Entity
 {
-	private Image playerImage;
-	private double timeAlive = 0.0;
-	private double centerX;
-	private double centerY;
-	private double radius;
-	private double angle;
-	private static double x;
-	private static double y;
+	Renderer renderer;
+	Image playerImage;
+	
+	double playerX;
+	double playerY;
 	
 	public static Image loadImage(String filePath) 
 	{
@@ -30,38 +26,38 @@ public class PlayerManager implements Renderer.Entity
 			return(null);
 		}
 	}
-	public PlayerManager(double x, double y, double radius) {
+	
+	public PlayerManager(Renderer renderer_)
+	{
 		this.playerImage = loadImage("PixelArtTutorial.png");
-		this.centerX = x;
-		this.centerY = y;
-		this.angle = 0.0;
-		this.radius = radius;
+		this.renderer = renderer_;
+		
+		this.playerX = 0.0;
+		this.playerY = 0.0;
 	}
 
 	@Override
-	public void tick(double deltaTime) {
-		// TODO Auto-generated method stub
-		this.timeAlive += deltaTime;
-		this.angle += 1.01 * deltaTime;
-		this.x = keyPressed.getX();
-		this.y = keyPressed.getY();
+	public void tick(double deltaTime)
+	{
+		this.playerX = this.renderer.getCameraXWorld();
+		this.playerY = this.renderer.getCameraYWorld();
 	}
 
 	@Override
-	public void draw(DrawCallCollector d) {
-		// TODO Auto-generated method stub
-		if (playerImage != null) {
-			double width = 1;
-			double height = 1;
-			d.drawTexturedRectangleWorld(x, y, 1, width, height, playerImage);;
+	public void draw(DrawCallCollector d)
+	{
+		if (playerImage != null)
+		{
+			final double playerWidth = 1.0;
+			final double playerHeight = 1.0;
+			
+			d.drawTexturedRectangleWorld(
+				this.playerX - 0.5 * playerWidth,
+				this.playerY - 0.5 * playerHeight,
+				0,
+				playerWidth,
+				playerHeight,
+				playerImage);
 		}
-	}
-	
-	public static double getX() {
-		return x;
-	}
-	
-	public static double getY() {
-		return y;
 	}
 }
