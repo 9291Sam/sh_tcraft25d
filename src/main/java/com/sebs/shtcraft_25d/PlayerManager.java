@@ -1,54 +1,89 @@
 package com.sebs.shtcraft_25d;
 
-import java.awt.Image;
-import java.io.File;
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
+import java.util.InputMismatchException;
 
 import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
+import com.sebs.shtcraft_25d.SpriteAnimation.AnimationType;
 
-public class PlayerManager implements Renderer.Entity
-{
+public class PlayerManager implements Renderer.Entity {
 	Renderer renderer;
-	Image playerImage;
-	
+	private SpriteAnimation animations;
+
 	double playerX;
 	double playerY;
-	
-	
-	
-	public PlayerManager(Renderer renderer_)
-	{
-		this.playerImage = Utils.loadImage("PixelArtTutorial.png");
+
+	public PlayerManager(Renderer renderer_) throws InputMismatchException, IOException, FileNotFoundException {
 		this.renderer = renderer_;
-		
+		// start reading in animations
+		this.animations = new SpriteAnimation();
+		this.animations.loadAnimations(
+				"char_a_p1_0bas_humn_v01.png");
+
 		this.playerX = 0.0;
 		this.playerY = 0.0;
 	}
 
 	@Override
-	public void tick(double deltaTime)
-	{
+	public void tick(double deltaTime) {
 		this.playerX = this.renderer.getCameraXWorld();
 		this.playerY = this.renderer.getCameraYWorld();
 	}
 
+	/**
+	 * Checks and manages the direction type of the animations in accordance to how
+	 * the player moves.
+	 * 
+	 * @return Array of buffered image animations based on direction
+	 */
+	public BufferedImage[] spriteImageDirection() {
+		int lastKey = 0;
+		if (renderer.isKeyPressed(KeyEvent.VK_A)) {// player moves left
+			lastKey = KeyEvent.VK_A;
+			return animations.getAnimations(AnimationType.walk_F);
+
+		} else if (renderer.isKeyPressed(KeyEvent.VK_D)) {// player moves right
+			return animations.getAnimations(AnimationType.walk_F);
+
+		} else if (renderer.isKeyPressed(KeyEvent.VK_W)) {// player moves fowards
+			return animations.getAnimations(AnimationType.walk_F);
+
+		} else if (renderer.isKeyPressed(KeyEvent.VK_S)) {// player moves backwards
+			return animations.getAnimations(AnimationType.walk_F);
+
+		} else { // stand images
+
+			if (lastKey == KeyEvent.VK_W) { // front stand
+				return animations.getAnimations(AnimationType.stand_F);
+
+			} else if (lastKey == KeyEvent.VK_A) { // left stand
+				return animations.getAnimations(AnimationType.stand_L);
+
+			} else if (lastKey == KeyEvent.VK_S) { // back stand
+				return animations.getAnimations(AnimationType.stand_B);
+
+			} else if (lastKey == KeyEvent.VK_D) { // right stand
+				return animations.getAnimations(AnimationType.stand_R);
+			}
+		}
+		return null;
+	}
+
 	@Override
-	public void draw(DrawCallCollector d)
-	{
-		if (playerImage != null)
-		{
+	public void draw(DrawCallCollector d) {
+		BufferedImage[] playerFrames = spriteImageDirection();
+		if (playerFrames != null && playerFrames.length > 0) {
 			final double playerWidth = 1.0;
 			final double playerHeight = 1.0;
-			
-			d.drawTexturedRectangleWorld(
-				this.playerX - 0.5 * playerWidth,
-				this.playerY - 0.5 * playerHeight,
-				0,
-				playerWidth,
-				playerHeight,
-				playerImage);
+
+			for (BufferedImage frame : playerFrames) {
+
+				d.drawTexturedRectangleWorld(this.playerX - 0.5 * playerWidth, this.playerY - 0.5 * playerHeight, 0,
+						playerWidth, playerHeight, frame);
+			}
 		}
 	}
 }
