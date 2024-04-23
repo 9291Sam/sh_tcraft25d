@@ -24,9 +24,9 @@ public class SpriteSheetLoader {
 			frames = new BufferedImage[numCols][numRows];
 
 			// Extract each frame from the sprite sheet
-			for (int col = 0; col < numCols; col++) {
-				for (int row = 0; row < numRows; row++) {
-					frames[col][row] = spriteSheet.getSubimage(col * frameWidth, row * frameHeight, frameWidth,
+			for (int row = 0; row < numRows; row++) {
+				for (int col = 0; col < numCols; col++) {
+					frames[row][col] = spriteSheet.getSubimage(col * frameWidth, row * frameHeight, frameWidth,
 							frameHeight);
 				}
 			}

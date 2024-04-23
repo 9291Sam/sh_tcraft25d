@@ -20,8 +20,7 @@ public class PlayerManager implements Renderer.Entity {
 		this.renderer = renderer_;
 		// start reading in animations
 		this.animations = new SpriteAnimation();
-		this.animations.loadAnimations(
-				"char_a_p1_0bas_humn_v01.png");
+//		this.animations.loadAnimations("char_a_p1_0bas_humn_v01.png");
 
 		this.playerX = 0.0;
 		this.playerY = 0.0;
@@ -39,20 +38,27 @@ public class PlayerManager implements Renderer.Entity {
 	 * 
 	 * @return Array of buffered image animations based on direction
 	 */
-	public BufferedImage[] spriteImageDirection() {
+	public BufferedImage[] spriteImageDirection() throws IOException, InputMismatchException {
 		int lastKey = 0;
 		if (renderer.isKeyPressed(KeyEvent.VK_A)) {// player moves left
 			lastKey = KeyEvent.VK_A;
-			return animations.getAnimations(AnimationType.walk_F);
+			this.animations.loadAnimations("char_a_p1_0bas_humn_v01.png", "A");
+			return animations.getAnimations(AnimationType.walk_L);
 
 		} else if (renderer.isKeyPressed(KeyEvent.VK_D)) {// player moves right
-			return animations.getAnimations(AnimationType.walk_F);
+			this.animations.loadAnimations("char_a_p1_0bas_humn_v01.png", "D");
+			lastKey = KeyEvent.VK_R;
+			return animations.getAnimations(AnimationType.walk_R);
 
 		} else if (renderer.isKeyPressed(KeyEvent.VK_W)) {// player moves fowards
+			this.animations.loadAnimations("char_a_p1_0bas_humn_v01.png", "W");
+			lastKey = KeyEvent.VK_F;
 			return animations.getAnimations(AnimationType.walk_F);
 
 		} else if (renderer.isKeyPressed(KeyEvent.VK_S)) {// player moves backwards
-			return animations.getAnimations(AnimationType.walk_F);
+			this.animations.loadAnimations("char_a_p1_0bas_humn_v01.png", "S");
+			lastKey = KeyEvent.VK_B;
+			return animations.getAnimations(AnimationType.walk_B);
 
 		} else { // stand images
 
@@ -74,16 +80,26 @@ public class PlayerManager implements Renderer.Entity {
 
 	@Override
 	public void draw(DrawCallCollector d) {
-		BufferedImage[] playerFrames = spriteImageDirection();
-		if (playerFrames != null && playerFrames.length > 0) {
-			final double playerWidth = 1.0;
-			final double playerHeight = 1.0;
+		BufferedImage[] playerFrames;
+		try {
+			playerFrames = spriteImageDirection();
+			if (playerFrames != null && playerFrames.length > 0) {
+				final double playerWidth = 1.0;
+				final double playerHeight = 1.0;
 
-			for (BufferedImage frame : playerFrames) {
+				for (BufferedImage frame : playerFrames) {
+					d.drawTexturedRectangleWorld(this.playerX - 0.5 * playerWidth, this.playerY - 0.5 * playerHeight, 0,
+							playerWidth, playerHeight, frame);
+				}
 
-				d.drawTexturedRectangleWorld(this.playerX - 0.5 * playerWidth, this.playerY - 0.5 * playerHeight, 0,
-						playerWidth, playerHeight, frame);
 			}
+
+		} catch (InputMismatchException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }
