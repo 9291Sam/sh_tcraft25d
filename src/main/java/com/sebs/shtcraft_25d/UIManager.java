@@ -32,7 +32,11 @@ public class UIManager implements Renderer.Entity
     }
     
     public double regen() {
-         return hp += 0.001;
+        if(hp <= 1.0) {
+            return hp += 0.001;
+        } else {
+            return hp;
+        }
     }
 
 }
