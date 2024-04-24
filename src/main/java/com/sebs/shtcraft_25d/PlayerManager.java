@@ -27,7 +27,7 @@ public class PlayerManager implements Renderer.Entity {
 	final double playerHeight = 3.0;
 
 	BufferedImage[] sprites;
-	
+
 	public PlayerManager(Renderer renderer_) throws InputMismatchException, IOException, FileNotFoundException {
 		this.renderer = renderer_;
 		// start reading in animations
@@ -56,8 +56,8 @@ public class PlayerManager implements Renderer.Entity {
 
 		if (renderer.isKeyPressed(KeyEvent.VK_F)) {
 			if (!wasFireKeyPressed) {
-				renderer.getItemManager().registerWorldEntity(new BlasterBullet(
-						new Vec2(playerX, playerY), this.playerTravelDirection));
+				renderer.getItemManager()
+						.registerWorldEntity(new BlasterBullet(new Vec2(playerX, playerY), this.playerTravelDirection));
 			}
 			wasFireKeyPressed = true;
 
@@ -96,22 +96,6 @@ public class PlayerManager implements Renderer.Entity {
 			this.animations.loadAnimations("char_a_p1_0bas_humn_v01.png", "S");
 			lastKey = KeyEvent.VK_B;
 			return animations.getAnimations(AnimationType.walk_B);
-
-		} else { // stand images
-
-			if (lastKey == KeyEvent.VK_W) { // front stand | call lowercase variables
-				this.animations.standingStill("char_a_p1_0bas_humn_v01.png", lastKey);
-				return animations.getAnimations(AnimationType.stand_F);
-
-			} else if (lastKey == KeyEvent.VK_A) { // left stand
-				return animations.getAnimations(AnimationType.stand_L);
-
-			} else if (lastKey == KeyEvent.VK_S) { // back stand
-				return animations.getAnimations(AnimationType.stand_B);
-
-			} else if (lastKey == KeyEvent.VK_D) { // right stand
-				return animations.getAnimations(AnimationType.stand_R);
-			}
 		}
 		return null;
 	}
@@ -121,12 +105,11 @@ public class PlayerManager implements Renderer.Entity {
 
 		try {
 			BufferedImage[] maybeNewSprites = spriteImageDirection();
-			
-			if (maybeNewSprites != null)
-			{
+
+			if (maybeNewSprites != null) {
 				this.sprites = maybeNewSprites;
 			}
-			
+
 			if (this.sprites != null && this.sprites.length > 0) {
 
 				for (BufferedImage frame : this.sprites) {
