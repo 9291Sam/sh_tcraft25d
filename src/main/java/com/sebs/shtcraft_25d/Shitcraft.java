@@ -51,7 +51,7 @@ public class Shitcraft {
 
 		TestSquare() {
 			try {
-				this.demo = ImageIO.read(new File("demo.jpeg"));
+				this.demo = ImageIO.read(new File("ShitHut.png"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -65,7 +65,7 @@ public class Shitcraft {
 		@Override
 		public void draw(DrawCallCollector d) {
 			d.drawFilledRectangleWorld(Math.cos(this.timeAlive), Math.sin(this.timeAlive), 1, 1.0, 1.0, Color.CYAN);
-			d.drawTexturedRectangleWorld(0.0, 0.0, 1, 1.0, 1.0, this.demo);
+			d.drawTexturedRectangleWorld(-2.5, 2.8, 1, 4.0, 4.0, this.demo);
 		}
 	}
 

@@ -28,7 +28,7 @@ public class Renderer extends JPanel implements KeyListener {
 		public void tick(double deltaTime);
 
 		public void draw(DrawCallCollector d);
-	}
+	} 
 
 	private Set<WeakReference<Entity>> entities;
 	private Map<Integer, Boolean> isKeyPressed;
