@@ -30,25 +30,15 @@ public class WorldManager implements Renderer.Entity
     private int modX;
     private int modY;
     
-    public static Image loadImage(String filePath) 
-    {
-        File file = new File(filePath);
-        try {
-            return ImageIO.read(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return(null);
-        }
-    }
-    
     public WorldManager(Renderer renderer_)
     {
         modX = 0;
         modY = 0;
         this.renderer = renderer_;  
-        
-        this.stone = loadImage("stone.png");
-        this.grass = loadImage("grassTexure.png");
+
+        this.stone = Utils.loadImage("stone.png");
+
+        this.grass = Utils.loadImage("grassTexure.png");
         
         for(int i = 0; i < rectangles.length; i++) {
             centerX = modX;

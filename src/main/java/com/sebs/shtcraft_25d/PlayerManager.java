@@ -17,14 +17,16 @@ public class PlayerManager implements Renderer.Entity {
 
 	double playerX;
 	double playerY;
-	
+
 	// may be the zero vector
 	Vec2 playerTravelDirection;
-	
+
 	boolean wasFireKeyPressed = false;
 
 	final double playerWidth = 3.0;
 	final double playerHeight = 3.0;
+
+	BufferedImage[] sprites;
 
 	public PlayerManager(Renderer renderer_) throws InputMismatchException, IOException, FileNotFoundException {
 		this.renderer = renderer_;
@@ -39,36 +41,30 @@ public class PlayerManager implements Renderer.Entity {
 
 	@Override
 	public void tick(double deltaTime) {
-		
+
 		double oldPlayerX = this.playerX;
 		double oldPlayerY = this.playerY;
-		
+
 		this.playerX = this.renderer.getCameraXWorld();
 		this.playerY = this.renderer.getCameraYWorld();
-		
+
 		Vec2 maybeNewDir = new Vec2(this.playerX - oldPlayerX, this.playerY - oldPlayerY).normalize();
-		
-		if (maybeNewDir.length() != 0.0 && !Float.isNaN(maybeNewDir.x) && !Float.isNaN(maybeNewDir.y))
-		{
+
+		if (maybeNewDir.length() != 0.0 && !Float.isNaN(maybeNewDir.x) && !Float.isNaN(maybeNewDir.y)) {
 			this.playerTravelDirection = maybeNewDir;
 		}
-		
-		if (renderer.isKeyPressed(KeyEvent.VK_F))
-		{	
-			if (!wasFireKeyPressed)
-			{
-				renderer.getItemManager().registerWorldEntity(new BlasterBullet(new Vec2(playerX, playerY - 0.75 * playerHeight), this.playerTravelDirection));
+
+		if (renderer.isKeyPressed(KeyEvent.VK_F)) {
+			if (!wasFireKeyPressed) {
+				renderer.getItemManager()
+						.registerWorldEntity(new BlasterBullet(new Vec2(playerX, playerY), this.playerTravelDirection));
 			}
-			
 			wasFireKeyPressed = true;
-			
-		}
-		else
-		{
+
+		} else {
 			wasFireKeyPressed = false;
 		}
-		
-		
+
 	}
 
 	/**
@@ -79,7 +75,7 @@ public class PlayerManager implements Renderer.Entity {
 	 */
 	public BufferedImage[] spriteImageDirection() throws IOException, InputMismatchException {
 		int lastKey = 0;
-		
+
 		// TODO: use move dir vectors
 		if (renderer.isKeyPressed(KeyEvent.VK_A)) {// player moves left
 			lastKey = KeyEvent.VK_A;
@@ -100,35 +96,24 @@ public class PlayerManager implements Renderer.Entity {
 			this.animations.loadAnimations("char_a_p1_0bas_humn_v01.png", "S");
 			lastKey = KeyEvent.VK_B;
 			return animations.getAnimations(AnimationType.walk_B);
-
-		} else { // stand images
-
-			if (lastKey == KeyEvent.VK_W) { // front stand
-				return animations.getAnimations(AnimationType.stand_F);
-
-			} else if (lastKey == KeyEvent.VK_A) { // left stand
-				return animations.getAnimations(AnimationType.stand_L);
-
-			} else if (lastKey == KeyEvent.VK_S) { // back stand
-				return animations.getAnimations(AnimationType.stand_B);
-
-			} else if (lastKey == KeyEvent.VK_D) { // right stand
-				return animations.getAnimations(AnimationType.stand_R);
-			}
 		}
 		return null;
 	}
 
 	@Override
 	public void draw(DrawCallCollector d) {
-		BufferedImage[] playerFrames;
-		try {
-			playerFrames = spriteImageDirection();
-			if (playerFrames != null && playerFrames.length > 0) {
 
-				for (BufferedImage frame : playerFrames) {
-					d.drawTexturedRectangleWorld(this.playerX - 0.5 * playerWidth, this.playerY - 0.5 * playerHeight, 0,
-							playerWidth, playerHeight, frame);
+		try {
+			BufferedImage[] maybeNewSprites = spriteImageDirection();
+			if (maybeNewSprites != null) {
+				this.sprites = maybeNewSprites;
+			}
+
+			if (this.sprites != null && this.sprites.length > 0) {
+
+				for (BufferedImage frame : this.sprites) {
+					d.drawTexturedRectangleWorld(this.playerX - 0.475 * playerWidth, this.playerY + 0.25 * playerHeight,
+							3, playerWidth, playerHeight, frame);
 				}
 
 			}
