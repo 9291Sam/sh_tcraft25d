@@ -21,7 +21,7 @@ public class WorldEntityManager implements Renderer.Entity
 	}
 	
 	
-	public void registerItem(WorldEntity i)
+	public void registerWorldEntity(WorldEntity i)
 	{
 		this.activeItems.add(i);
 		
@@ -39,6 +39,8 @@ public class WorldEntityManager implements Renderer.Entity
 				this.activeItems.remove(e);
 			}
 		}
+		
+		// TODO: test for colissions
 	}
 
 	@Override

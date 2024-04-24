@@ -9,6 +9,8 @@ public class BlasterBullet extends WorldEntity
 	private double timeAlive = 0.0;
 	private final Vec2 origin;
 	private final Vec2 dir;
+	private static final double duration = 5.0;
+	private static final double speed = 8.0;
 	
 	static Image maybeBlasterImage;
 	static Image getBlasterImage()
@@ -40,21 +42,19 @@ public class BlasterBullet extends WorldEntity
 	{
 		this.timeAlive += deltaTime;
 
-		if (this.timeAlive > 5.0)
+		if (this.timeAlive > BlasterBullet.duration)
 		{
 			this.isAlive = false;
 		}
 		
 		Vec2 dirIntercalc = new Vec2(this.dir);
-		dirIntercalc.mul((float)this.timeAlive);
+		dirIntercalc.mul((float)BlasterBullet.speed * (float)this.timeAlive);
 		
 		Vec2 originInterCalc = new Vec2(this.origin);
 		originInterCalc.add(dirIntercalc);
 		
 		this.position = originInterCalc;
 		
-		// I love not having operator over loading
-		// I love having a reference oriented language
 		// this is so much more readable than
 		// this.position = this.origin + this.dir * this.timeAlive;
 	}

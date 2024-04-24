@@ -23,6 +23,9 @@ public class PlayerManager implements Renderer.Entity {
 	
 	boolean wasFireKeyPressed = false;
 
+	final double playerWidth = 3.0;
+	final double playerHeight = 3.0;
+
 	public PlayerManager(Renderer renderer_) throws InputMismatchException, IOException, FileNotFoundException {
 		this.renderer = renderer_;
 		// start reading in animations
@@ -54,7 +57,7 @@ public class PlayerManager implements Renderer.Entity {
 		{	
 			if (!wasFireKeyPressed)
 			{
-				renderer.getItemManager().registerItem(new BlasterBullet(new Vec2(playerX, playerY), this.playerTravelDirection));
+				renderer.getItemManager().registerWorldEntity(new BlasterBullet(new Vec2(playerX, playerY - 0.75 * playerHeight), this.playerTravelDirection));
 			}
 			
 			wasFireKeyPressed = true;
@@ -122,8 +125,6 @@ public class PlayerManager implements Renderer.Entity {
 		try {
 			playerFrames = spriteImageDirection();
 			if (playerFrames != null && playerFrames.length > 0) {
-				final double playerWidth = 1.0;
-				final double playerHeight = 1.0;
 
 				for (BufferedImage frame : playerFrames) {
 					d.drawTexturedRectangleWorld(this.playerX - 0.5 * playerWidth, this.playerY - 0.5 * playerHeight, 0,
