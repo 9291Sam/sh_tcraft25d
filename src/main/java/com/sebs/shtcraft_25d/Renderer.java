@@ -160,13 +160,13 @@ public class Renderer extends JPanel implements KeyListener
 			
 			//Setting player boundary
 			if (this.cameraX > 50) {
-			    this.cameraX -= 0.1;
+			    this.cameraX -= 0.001;
 			} else if (this.cameraY > 50){
-			    this.cameraY -= 0.1;
+			    this.cameraY -= 0.001;
 			} else if (this.cameraX < -50) {
-			    this.cameraX += 0.1;
+			    this.cameraX += 0.001;
 			}else if (this.cameraY < -50){
-                this.cameraY += 0.1;
+                this.cameraY += 0.001;
 			} else {
 			    this.cameraX += moveVector.x * cameraMoveSpeed * deltaTime;
                 this.cameraY += moveVector.y * cameraMoveSpeed * deltaTime;
