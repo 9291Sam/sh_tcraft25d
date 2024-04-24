@@ -17,6 +17,9 @@ public class PlayerManager implements Renderer.Entity {
 
 	double playerX;
 	double playerY;
+	
+	// may be the zero vector
+	Vec2 playerTravelDirection;
 
 	public PlayerManager(Renderer renderer_) throws InputMismatchException, IOException, FileNotFoundException {
 		this.renderer = renderer_;
@@ -26,16 +29,28 @@ public class PlayerManager implements Renderer.Entity {
 
 		this.playerX = 0.0;
 		this.playerY = 0.0;
+		this.playerTravelDirection = new Vec2(1.0, 0.0);
 	}
 
 	@Override
 	public void tick(double deltaTime) {
+		
+		double oldPlayerX = this.playerX;
+		double oldPlayerY = this.playerY;
+		
 		this.playerX = this.renderer.getCameraXWorld();
 		this.playerY = this.renderer.getCameraYWorld();
 		
+		Vec2 maybeNewDir = new Vec2(this.playerX - oldPlayerX, this.playerY - oldPlayerY).normalize();
+		
+		if (maybeNewDir.length() != 0.0 && !Float.isNaN(maybeNewDir.x) && !Float.isNaN(maybeNewDir.y))
+		{
+			this.playerTravelDirection = maybeNewDir;
+		}
+		
 		if (renderer.isKeyPressed(KeyEvent.VK_F))
 		{
-			renderer.getItemManager().registerItem(new Item(Item.Type.Grass, new Vec2(0.5, 0.0)));
+			renderer.getItemManager().registerItem(new BlasterBullet(new Vec2(playerX, playerY)));
 		}
 	}
 
