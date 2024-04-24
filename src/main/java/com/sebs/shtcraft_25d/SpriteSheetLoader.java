@@ -2,6 +2,7 @@ package com.sebs.shtcraft_25d;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -9,7 +10,8 @@ import javax.imageio.ImageIO;
 public class SpriteSheetLoader {
 	private BufferedImage[][] frames;
 
-	public SpriteSheetLoader(String spriteSheetPath, int frameWidth, int frameHeight) {
+	public SpriteSheetLoader(String spriteSheetPath, int frameWidth, int frameHeight)
+			throws IOException, FileNotFoundException {
 		try {
 			// Load the sprite sheet image
 			BufferedImage spriteSheet = ImageIO.read(new File(spriteSheetPath));
@@ -22,9 +24,9 @@ public class SpriteSheetLoader {
 			frames = new BufferedImage[numCols][numRows];
 
 			// Extract each frame from the sprite sheet
-			for (int col = 0; col < numCols; col++) {
-				for (int row = 0; row < numRows; row++) {
-					frames[col][row] = spriteSheet.getSubimage(col * frameWidth, row * frameHeight, frameWidth,
+			for (int row = 0; row < numRows; row++) {
+				for (int col = 0; col < numCols; col++) {
+					frames[row][col] = spriteSheet.getSubimage(col * frameWidth, row * frameHeight, frameWidth,
 							frameHeight);
 				}
 			}
