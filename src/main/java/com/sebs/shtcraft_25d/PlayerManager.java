@@ -25,8 +25,6 @@ public class PlayerManager implements Renderer.Entity {
 
 	final double playerWidth = 3.0;
 	final double playerHeight = 3.0;
-	
-	BufferedImage[] sprites;
 
 	public PlayerManager(Renderer renderer_) throws InputMismatchException, IOException, FileNotFoundException {
 		this.renderer = renderer_;
@@ -57,7 +55,7 @@ public class PlayerManager implements Renderer.Entity {
 		if (renderer.isKeyPressed(KeyEvent.VK_F)) {
 			if (!wasFireKeyPressed) {
 				renderer.getItemManager().registerWorldEntity(new BlasterBullet(
-						new Vec2(playerX, playerY), this.playerTravelDirection));
+						new Vec2(playerX, playerY - 0.75 * playerHeight), this.playerTravelDirection));
 			}
 			wasFireKeyPressed = true;
 
@@ -97,26 +95,33 @@ public class PlayerManager implements Renderer.Entity {
 			lastKey = KeyEvent.VK_B;
 			return animations.getAnimations(AnimationType.walk_B);
 
-		} 
-		
+		} else { // stand images
+
+			if (lastKey == KeyEvent.VK_W) { // front stand | call lowercase variables
+				this.animations.standingStill("char_a_p1_0bas_humn_v01.png", lastKey);
+				return animations.getAnimations(AnimationType.stand_F);
+
+			} else if (lastKey == KeyEvent.VK_A) { // left stand
+				return animations.getAnimations(AnimationType.stand_L);
+
+			} else if (lastKey == KeyEvent.VK_S) { // back stand
+				return animations.getAnimations(AnimationType.stand_B);
+
+			} else if (lastKey == KeyEvent.VK_D) { // right stand
+				return animations.getAnimations(AnimationType.stand_R);
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public void draw(DrawCallCollector d) {
-
+		BufferedImage[] playerFrames;
 		try {
-			
-			BufferedImage[] maybeNewSprites = spriteImageDirection();
-			
-			if (maybeNewSprites != null)
-			{
-				this.sprites = maybeNewSprites;
-			}
-			
-			if (this.sprites != null && this.sprites.length > 0) {
+			playerFrames = spriteImageDirection();
+			if (playerFrames != null && playerFrames.length > 0) {
 
-				for (BufferedImage frame : this.sprites) {
+				for (BufferedImage frame : playerFrames) {
 					d.drawTexturedRectangleWorld(this.playerX - 0.475 * playerWidth, this.playerY + 0.25 * playerHeight,
 							3, playerWidth, playerHeight, frame);
 				}
