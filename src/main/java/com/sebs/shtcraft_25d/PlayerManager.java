@@ -57,7 +57,7 @@ public class PlayerManager implements Renderer.Entity {
 		{	
 			if (!wasFireKeyPressed)
 			{
-				renderer.getItemManager().registerWorldEntity(new BlasterBullet(new Vec2(playerX, playerY - 0.75 * playerHeight), this.playerTravelDirection));
+				renderer.getItemManager().registerWorldEntity(new BlasterBullet(new Vec2(playerX, playerY), this.playerTravelDirection));
 			}
 			
 			wasFireKeyPressed = true;
@@ -127,7 +127,7 @@ public class PlayerManager implements Renderer.Entity {
 			if (playerFrames != null && playerFrames.length > 0) {
 
 				for (BufferedImage frame : playerFrames) {
-					d.drawTexturedRectangleWorld(this.playerX - 0.5 * playerWidth, this.playerY - 0.5 * playerHeight, 0,
+					d.drawTexturedRectangleWorld(this.playerX - 0.475 * playerWidth, this.playerY + 0.25 * playerHeight, 3,
 							playerWidth, playerHeight, frame);
 				}
 
