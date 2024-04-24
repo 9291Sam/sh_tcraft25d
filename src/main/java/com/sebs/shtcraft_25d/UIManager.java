@@ -12,7 +12,7 @@ public class UIManager implements Renderer.Entity
     public UIManager(Renderer renderer)
     {
         this.renderer = renderer;
-        hp = 1.0;
+        hp = 0.1;
     }
     
     @Override
@@ -24,6 +24,7 @@ public class UIManager implements Renderer.Entity
     	// TODO: do dynamic things
     	d.drawFilledRectangleScreen(0.0, 0.95, 20, 0.25, 0.1, Color.GRAY);
     	d.drawFilledRectangleScreen(0.01, 0.96, 21, (0.23 * hp), 0.035, Color.RED);
+    	regen();
     }
     
     public double hit() {
