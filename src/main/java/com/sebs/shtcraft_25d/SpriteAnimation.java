@@ -1,5 +1,6 @@
 package com.sebs.shtcraft_25d;
 
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
@@ -20,7 +21,7 @@ public class SpriteAnimation {
 		animations = new HashMap<>();
 	}
 
-	public void standingStill(String file, String lastKey) throws IOException, InputMismatchException {
+	public void standingStill(String file, int lastKey) throws IOException, InputMismatchException {
 
 		SpriteSheetLoader loader = new SpriteSheetLoader(file, 64, 64);
 		BufferedImage[][] frames = loader.getFrames();
@@ -29,18 +30,22 @@ public class SpriteAnimation {
 		final int MAX_SIZE = 6;
 		BufferedImage[] arr = new BufferedImage[MAX_SIZE];
 
-		if (lastKey == "S") {
-			arr[0] = frames[0][1]; // forwards
+		if (lastKey == KeyEvent.VK_S) {
+			arr[0] = frames[0][0]; // Backwards
 			animations.put(AnimationType.stand_B, arr);
-		} else if (lastKey == "W") {
+
+		} else if (lastKey == KeyEvent.VK_S) {
 			arr[0] = frames[0][1]; // forwards
 			animations.put(AnimationType.stand_F, arr);
-		} else if (lastKey == "D") {
-			arr[0] = frames[0][1]; // forwards
+
+		} else if (lastKey == KeyEvent.VK_S) {
+			arr[0] = frames[0][3]; // Left
 			animations.put(AnimationType.stand_R, arr);
-		} else if (lastKey == "A") {
-			arr[0] = frames[0][1]; // forwards
+
+		} else if (lastKey == KeyEvent.VK_W) {
+			arr[0] = frames[0][2]; // Right
 			animations.put(AnimationType.stand_L, arr);
+
 		}
 
 	}

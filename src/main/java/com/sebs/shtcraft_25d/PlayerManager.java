@@ -17,10 +17,10 @@ public class PlayerManager implements Renderer.Entity {
 
 	double playerX;
 	double playerY;
-	
+
 	// may be the zero vector
 	Vec2 playerTravelDirection;
-	
+
 	boolean wasFireKeyPressed = false;
 
 	final double playerWidth = 3.0;
@@ -39,36 +39,31 @@ public class PlayerManager implements Renderer.Entity {
 
 	@Override
 	public void tick(double deltaTime) {
-		
+
 		double oldPlayerX = this.playerX;
 		double oldPlayerY = this.playerY;
-		
+
 		this.playerX = this.renderer.getCameraXWorld();
 		this.playerY = this.renderer.getCameraYWorld();
-		
+
 		Vec2 maybeNewDir = new Vec2(this.playerX - oldPlayerX, this.playerY - oldPlayerY).normalize();
-		
-		if (maybeNewDir.length() != 0.0 && !Float.isNaN(maybeNewDir.x) && !Float.isNaN(maybeNewDir.y))
-		{
+
+		if (maybeNewDir.length() != 0.0 && !Float.isNaN(maybeNewDir.x) && !Float.isNaN(maybeNewDir.y)) {
 			this.playerTravelDirection = maybeNewDir;
 		}
-		
-		if (renderer.isKeyPressed(KeyEvent.VK_F))
-		{	
-			if (!wasFireKeyPressed)
-			{
-				renderer.getItemManager().registerWorldEntity(new BlasterBullet(new Vec2(playerX, playerY - 0.75 * playerHeight), this.playerTravelDirection));
+
+		if (renderer.isKeyPressed(KeyEvent.VK_F)) {
+			if (!wasFireKeyPressed) {
+				renderer.getItemManager().registerWorldEntity(new BlasterBullet(
+						new Vec2(playerX, playerY - 0.75 * playerHeight), this.playerTravelDirection));
 			}
-			
+
 			wasFireKeyPressed = true;
-			
-		}
-		else
-		{
+
+		} else {
 			wasFireKeyPressed = false;
 		}
-		
-		
+
 	}
 
 	/**
@@ -79,7 +74,7 @@ public class PlayerManager implements Renderer.Entity {
 	 */
 	public BufferedImage[] spriteImageDirection() throws IOException, InputMismatchException {
 		int lastKey = 0;
-		
+
 		// TODO: use move dir vectors
 		if (renderer.isKeyPressed(KeyEvent.VK_A)) {// player moves left
 			lastKey = KeyEvent.VK_A;
@@ -103,7 +98,8 @@ public class PlayerManager implements Renderer.Entity {
 
 		} else { // stand images
 
-			if (lastKey == KeyEvent.VK_W) { // front stand
+			if (lastKey == KeyEvent.VK_W) { // front stand | call lowercase variables
+				this.animations.standingStill("char_a_p1_0bas_humn_v01.png", lastKey);
 				return animations.getAnimations(AnimationType.stand_F);
 
 			} else if (lastKey == KeyEvent.VK_A) { // left stand
