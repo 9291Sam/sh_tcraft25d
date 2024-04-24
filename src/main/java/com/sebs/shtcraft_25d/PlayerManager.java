@@ -20,6 +20,8 @@ public class PlayerManager implements Renderer.Entity {
 	
 	// may be the zero vector
 	Vec2 playerTravelDirection;
+	
+	boolean wasFireKeyPressed = false;
 
 	public PlayerManager(Renderer renderer_) throws InputMismatchException, IOException, FileNotFoundException {
 		this.renderer = renderer_;
@@ -49,9 +51,21 @@ public class PlayerManager implements Renderer.Entity {
 		}
 		
 		if (renderer.isKeyPressed(KeyEvent.VK_F))
-		{
-			renderer.getItemManager().registerItem(new BlasterBullet(new Vec2(playerX, playerY)));
+		{	
+			if (!wasFireKeyPressed)
+			{
+				renderer.getItemManager().registerItem(new BlasterBullet(new Vec2(playerX, playerY), this.playerTravelDirection));
+			}
+			
+			wasFireKeyPressed = true;
+			
 		}
+		else
+		{
+			wasFireKeyPressed = false;
+		}
+		
+		
 	}
 
 	/**
