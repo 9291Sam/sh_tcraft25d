@@ -9,12 +9,22 @@ import java.util.InputMismatchException;
 import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
 import com.sebs.shtcraft_25d.SpriteAnimation.AnimationType;
 
+import glm.vec._2.Vec2;
+
 public class PlayerManager implements Renderer.Entity {
 	Renderer renderer;
 	private SpriteAnimation animations;
 
 	double playerX;
 	double playerY;
+	
+	// may be the zero vector
+	Vec2 playerTravelDirection;
+	
+	boolean wasFireKeyPressed = false;
+
+	final double playerWidth = 3.0;
+	final double playerHeight = 3.0;
 
 	public PlayerManager(Renderer renderer_) throws InputMismatchException, IOException, FileNotFoundException {
 		this.renderer = renderer_;
@@ -24,12 +34,41 @@ public class PlayerManager implements Renderer.Entity {
 
 		this.playerX = 0.0;
 		this.playerY = 0.0;
+		this.playerTravelDirection = new Vec2(1.0, 0.0);
 	}
 
 	@Override
 	public void tick(double deltaTime) {
+		
+		double oldPlayerX = this.playerX;
+		double oldPlayerY = this.playerY;
+		
 		this.playerX = this.renderer.getCameraXWorld();
 		this.playerY = this.renderer.getCameraYWorld();
+		
+		Vec2 maybeNewDir = new Vec2(this.playerX - oldPlayerX, this.playerY - oldPlayerY).normalize();
+		
+		if (maybeNewDir.length() != 0.0 && !Float.isNaN(maybeNewDir.x) && !Float.isNaN(maybeNewDir.y))
+		{
+			this.playerTravelDirection = maybeNewDir;
+		}
+		
+		if (renderer.isKeyPressed(KeyEvent.VK_F))
+		{	
+			if (!wasFireKeyPressed)
+			{
+				renderer.getItemManager().registerWorldEntity(new BlasterBullet(new Vec2(playerX, playerY - 0.75 * playerHeight), this.playerTravelDirection));
+			}
+			
+			wasFireKeyPressed = true;
+			
+		}
+		else
+		{
+			wasFireKeyPressed = false;
+		}
+		
+		
 	}
 
 	/**
@@ -40,6 +79,8 @@ public class PlayerManager implements Renderer.Entity {
 	 */
 	public BufferedImage[] spriteImageDirection() throws IOException, InputMismatchException {
 		int lastKey = 0;
+		
+		// TODO: use move dir vectors
 		if (renderer.isKeyPressed(KeyEvent.VK_A)) {// player moves left
 			lastKey = KeyEvent.VK_A;
 			this.animations.loadAnimations("char_a_p1_0bas_humn_v01.png", "A");
@@ -84,8 +125,6 @@ public class PlayerManager implements Renderer.Entity {
 		try {
 			playerFrames = spriteImageDirection();
 			if (playerFrames != null && playerFrames.length > 0) {
-				final double playerWidth = 1.0;
-				final double playerHeight = 1.0;
 
 				for (BufferedImage frame : playerFrames) {
 					d.drawTexturedRectangleWorld(this.playerX - 0.5 * playerWidth, this.playerY - 0.5 * playerHeight, 0,

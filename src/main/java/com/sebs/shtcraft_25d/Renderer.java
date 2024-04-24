@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
@@ -45,6 +46,9 @@ public class Renderer extends JPanel implements KeyListener
 	private int windowWidthPx, windowHeightPx;
 	private double cameraX, cameraY;
 	
+	 // TODO: make a proper Game class that holds world level objects like this
+	private WorldEntityManager itemManager;
+	
 	public Renderer()
 	{
 		final int defaultWidth = 600;
@@ -58,11 +62,13 @@ public class Renderer extends JPanel implements KeyListener
 		setFocusable(true);
 		addKeyListener(this);
 		
-		this.entities = new HashSet<>();
+		this.entities = ConcurrentHashMap.newKeySet();
 		this.isKeyPressed = new HashMap<>();
 		this.nanosPrev = System.nanoTime();
 		this.cameraX = 0.0;
 		this.cameraY = 0.0;
+		this.itemManager = new WorldEntityManager(this);
+		this.register(new WeakReference<Entity>(this.itemManager));
 		
 		for (int i = 0; i < 256; ++i)
 		{
@@ -80,6 +86,11 @@ public class Renderer extends JPanel implements KeyListener
 		return this.cameraY;
 	}
 	
+	public WorldEntityManager getItemManager()
+	{
+		return this.itemManager;
+	}
+	
 	@Override
 	public void paintComponent(Graphics g)
 	{
@@ -91,14 +102,21 @@ public class Renderer extends JPanel implements KeyListener
 	    DrawCallCollector callCollector = new DrawCallCollector(
 	    		g,
 	    		this.cameraX, this.cameraY, 10.0 * (float)this.windowWidthPx / this.windowHeightPx, 10.0, this.windowWidthPx, this.windowHeightPx);
-
-	    this.entities = 
-	        this.entities.stream()
-	            .map(WeakReference::get)
-	            .filter(Objects::nonNull)
-	            .peek(e -> e.draw(callCollector))
-	            .map(WeakReference::new)
-	            .collect(Collectors.toSet());
+	    
+	    for (WeakReference<Entity> w : this.entities)
+	    {
+	    	Entity e = w.get();
+	    	
+	    	if (e != null)
+	    	{
+	    		e.draw(callCollector);
+	    	}
+	    	else
+	    	{
+	    		this.entities.remove(w);
+	    	}
+	    }	
+	    
 	    
 	    callCollector.dispatch();
 	}
@@ -144,7 +162,6 @@ public class Renderer extends JPanel implements KeyListener
 			this.cameraY += moveVector.y * cameraMoveSpeed * deltaTime;
 		}
 		
-		
 		for (WeakReference<Entity> e : this.entities)
 		{
 			Entity maybeEntity = e.get();
@@ -154,6 +171,7 @@ public class Renderer extends JPanel implements KeyListener
 				maybeEntity.tick(deltaTime);
 			}
 		}
+	
 	
 		nanosPrev = now;
 		
@@ -323,7 +341,10 @@ public class Renderer extends JPanel implements KeyListener
 		
 		while (!renderer.shouldClose())
 		{
-			renderer.tickAndDraw();
+			synchronized (renderer.entities)
+			{
+				renderer.tickAndDraw();
+			}
 			
 			// because of Java Things :tm: if we want shitcraft to stay alive, we need to use it 
 			retainer(shitcraft);
