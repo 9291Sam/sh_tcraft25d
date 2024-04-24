@@ -158,8 +158,19 @@ public class Renderer extends JPanel implements KeyListener
 		{
 			moveVector.normalize();
 			
-			this.cameraX += moveVector.x * cameraMoveSpeed * deltaTime;
-			this.cameraY += moveVector.y * cameraMoveSpeed * deltaTime;
+			//Setting player boundary
+			if (this.cameraX > 50) {
+			    this.cameraX -= 0.1;
+			} else if (this.cameraY > 50){
+			    this.cameraY -= 0.1;
+			} else if (this.cameraX < -50) {
+			    this.cameraX += 0.1;
+			}else if (this.cameraY < -50){
+                this.cameraY += 0.1;
+			} else {
+			    this.cameraX += moveVector.x * cameraMoveSpeed * deltaTime;
+                this.cameraY += moveVector.y * cameraMoveSpeed * deltaTime;
+			}
 		}
 		
 		for (WeakReference<Entity> e : this.entities)

@@ -30,7 +30,7 @@ public class PlayerManager implements Renderer.Entity {
 		this.renderer = renderer_;
 		// start reading in animations
 		this.animations = new SpriteAnimation();
-//		this.animations.loadAnimations("char_a_p1_0bas_humn_v01.png");
+		//this.animations.loadAnimations("char_a_p1_0bas_humn_v01.png");
 
 		this.playerX = 0.0;
 		this.playerY = 0.0;
@@ -47,7 +47,6 @@ public class PlayerManager implements Renderer.Entity {
 		this.playerY = this.renderer.getCameraYWorld();
 		
 		Vec2 maybeNewDir = new Vec2(this.playerX - oldPlayerX, this.playerY - oldPlayerY).normalize();
-		
 		if (maybeNewDir.length() != 0.0 && !Float.isNaN(maybeNewDir.x) && !Float.isNaN(maybeNewDir.y))
 		{
 		        this.playerTravelDirection = maybeNewDir;
