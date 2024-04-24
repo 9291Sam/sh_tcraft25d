@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
 import com.sebs.shtcraft_25d.Renderer.Entity;
+import com.sebs.shtcraft_25d.WorldEntity.ColissionType;
 
 public class WorldEntityManager implements Renderer.Entity
 {
@@ -31,6 +32,10 @@ public class WorldEntityManager implements Renderer.Entity
 	@Override
 	public void tick(double deltaTime)
 	{
+		Set<WorldEntity> thickEntities = this.activeItems
+			.stream()
+			.filter(e -> e.getColissionType().equals(ColissionType.Thick))
+			.collect(Collectors.toSet());
 		
 		for (WorldEntity e : this.activeItems)
 		{
@@ -39,6 +44,22 @@ public class WorldEntityManager implements Renderer.Entity
 				this.activeItems.remove(e);
 			}
 		}
+		
+		for (WorldEntity all : this.activeItems)
+		{
+			for (WorldEntity thick : thickEntities)
+			{
+				if (all != thick)
+				{
+					if (thick.getBoundingBox().collidesWith(all.getBoundingBox()))
+					{
+						System.out.printf("Colission detected %s %s\n", all.toString(), thick.toString());
+					}
+				}
+				
+			}
+		}
+		
 		
 		// TODO: test for colissions
 	}

@@ -20,7 +20,6 @@ public class Shitcraft {
 	private WorldManager worldManager;
 	private PlayerManager playerManager;
 	private UIManager UIManager;
-	private Zombie zombie;
 	private Inventory inventory;
 
 	public Shitcraft(Renderer renderer_) {
@@ -38,14 +37,14 @@ public class Shitcraft {
 		this.worldManager = new WorldManager(this.renderer);
 		this.UIManager = new UIManager(this.renderer);
 		this.inventory = new Inventory(this.renderer);
-		this.zombie = new Zombie(new Vec2(0.0, 0.0));
-		renderer.register(new WeakReference<Entity>(this.zombie));
 
 		renderer.register(new WeakReference<Entity>(this.worldManager));
 		renderer.register(new WeakReference<Entity>(this.testSquare));
 		renderer.register(new WeakReference<Entity>(this.playerManager));
 		renderer.register(new WeakReference<Entity>(this.UIManager));
 		renderer.register(new WeakReference<Entity>(this.inventory));
+		
+		this.renderer.getWorldManager().registerWorldEntity(new Zombie(new Vec2(0.0, 0.0)));
 	}
 
 	private static class TestSquare implements Renderer.Entity {

@@ -11,32 +11,48 @@ import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
 
 import glm.vec._2.Vec2;
 
-public class Zombie implements Renderer.Entity
+public class Zombie extends WorldEntity
 {
-	private Image demo;
+	private static Image zombieImage;
+	private static Image getZombieImage()
+	{
+		if (Zombie.zombieImage == null)
+		{
+			Zombie.zombieImage = Utils.loadImage("demo.jpeg");
+		}
+		
+		return Zombie.zombieImage;
+	}
+	
 	private Vec2 prev;
-	private Vec2 goal;
+	private Vec2 dir;
 	private final double tTravelGoal = 3.0;
 	private double t = 0;
 	private State state;
 	
 	Zombie(Vec2 start)
 	{	
+		super(Zombie.getZombieImage(), new Vec2(start), 1.0);
+		
 		this.prev = new Vec2(0.0, 0.0);
-		this.goal = new Vec2(0.0, 0.0);
-		this.t = 2.999;
+		this.dir = new Vec2((Math.random() * 2.0) - 1.0, (Math.random() * 2.0) - 1.0).normalize();
+		this.t = tTravelGoal - 0.00001;
 		this.state = State.Travel;
 		
-		try {
-			this.demo = ImageIO.read(new File("demo.jpeg"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	}
+	
+	private Vec2 calculateCurrentPos()
+	{
+		Vec2 workingPos = new Vec2(this.prev);
+		
+		workingPos.add(new Vec2(this.dir).mul((float)this.t));
+		
+		return workingPos;
 	}
 	
 	@Override public String toString()
-	{
-		return String.format("Zombie | prev: %s | goal: %s | t: %f", this.prev.toString(), this.goal.toString(), this.t);
+	{		
+		return String.format("Zombie @ %s", this.calculateCurrentPos().toString());
 	}
 	
 	@Override
@@ -45,9 +61,9 @@ public class Zombie implements Renderer.Entity
 		switch (this.state)
 		{
 		case Randomize:
-			this.prev = this.goal;
+			this.prev = this.calculateCurrentPos();
 			
-			this.goal = new Vec2((Math.random() - 0.5) * 20, (Math.random() - 0.5) * 20);
+			this.dir = new Vec2((Math.random() - 0.5), (Math.random() - 0.5)).normalize();
 
 			this.t = 0.0;
 			break;
@@ -82,19 +98,27 @@ public class Zombie implements Renderer.Entity
 	@Override
 	public void draw(DrawCallCollector d)
 	{					
-		Vec2 toGoal = this.prev.sub(this.goal);
-		toGoal = toGoal.normalize();
+		Vec2 pos = this.calculateCurrentPos();
 		
 		d.drawFilledRectangleWorld(
-				this.prev.x + toGoal.x * this.t,
-				this.prev.y + toGoal.y * this.t,
-				1, 1.0, 1.0, Color.RED);
+				pos.x,
+				pos.y,
+				1,
+				this.edgeLength,
+				this.edgeLength,
+				Color.RED);
 	}
 	
 	private enum State
 	{
 		Randomize,
 		Travel
+	}
+
+	@Override
+	protected ColissionType getColissionType()
+	{
+		return ColissionType.Thick;
 	}
 }
 

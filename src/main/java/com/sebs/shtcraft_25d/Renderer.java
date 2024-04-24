@@ -72,7 +72,7 @@ public class Renderer extends JPanel implements KeyListener {
 		return this.cameraY;
 	}
 
-	public WorldEntityManager getItemManager() {
+	public WorldEntityManager getWorldManager() {
 		return this.itemManager;
 	}
 

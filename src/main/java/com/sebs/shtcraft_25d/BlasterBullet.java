@@ -25,7 +25,7 @@ public class BlasterBullet extends WorldEntity
 
 	public BlasterBullet(Vec2 position_, Vec2 dir_)
 	{
-		super(BlasterBullet.getBlasterImage(), position_);
+		super(BlasterBullet.getBlasterImage(), position_, 0.25);
 		
 		this.origin = new Vec2(this.position);
 		this.dir = new Vec2(dir_.x, dir_.y).normalize();
@@ -57,6 +57,14 @@ public class BlasterBullet extends WorldEntity
 		
 		// this is so much more readable than
 		// this.position = this.origin + this.dir * this.timeAlive;
+	}
+
+	
+
+	@Override
+	protected ColissionType getColissionType()
+	{
+		return ColissionType.Thin;
 	}
 
 }

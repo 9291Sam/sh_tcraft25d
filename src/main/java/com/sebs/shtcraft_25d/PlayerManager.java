@@ -56,7 +56,7 @@ public class PlayerManager implements Renderer.Entity {
 
 		if (renderer.isKeyPressed(KeyEvent.VK_F)) {
 			if (!wasFireKeyPressed) {
-				renderer.getItemManager()
+				renderer.getWorldManager()
 						.registerWorldEntity(new BlasterBullet(new Vec2(playerX, playerY), this.playerTravelDirection));
 			}
 			wasFireKeyPressed = true;
