@@ -50,7 +50,7 @@ public class PlayerManager implements Renderer.Entity {
 		
 		if (maybeNewDir.length() != 0.0 && !Float.isNaN(maybeNewDir.x) && !Float.isNaN(maybeNewDir.y))
 		{
-	        this.playerTravelDirection = maybeNewDir;
+		        this.playerTravelDirection = maybeNewDir;
 		}
 		
 		if (renderer.isKeyPressed(KeyEvent.VK_F))
@@ -127,8 +127,8 @@ public class PlayerManager implements Renderer.Entity {
 			if (playerFrames != null && playerFrames.length > 0) {
 
 				for (BufferedImage frame : playerFrames) {
-				    d.drawTexturedRectangleWorld(this.playerX - 0.475 * playerWidth, this.playerY + 0.25 * playerHeight, 3,
-						playerWidth, playerHeight, frame);
+					d.drawTexturedRectangleWorld(this.playerX - 0.475 * playerWidth, this.playerY + 0.25 * playerHeight, 3,
+							playerWidth, playerHeight, frame);
 				}
 
 			}
