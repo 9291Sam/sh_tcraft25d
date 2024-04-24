@@ -105,7 +105,6 @@ public class PlayerManager implements Renderer.Entity {
 
 		try {
 			BufferedImage[] maybeNewSprites = spriteImageDirection();
-
 			if (maybeNewSprites != null) {
 				this.sprites = maybeNewSprites;
 			}
