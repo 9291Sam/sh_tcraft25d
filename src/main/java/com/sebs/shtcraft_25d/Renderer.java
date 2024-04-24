@@ -132,9 +132,18 @@ public class Renderer extends JPanel implements KeyListener {
 		// trying to normalize the zero vector isn't a good idea.
 		if (moveVector.x != 0.0 || moveVector.y != 0.0) {
 			moveVector.normalize();
-
-			this.cameraX += moveVector.x * cameraMoveSpeed * deltaTime;
-			this.cameraY += moveVector.y * cameraMoveSpeed * deltaTime;
+			if(cameraX > 50) {
+			    this.cameraX -= 0.001;
+			} else if(cameraX < -50) {
+                this.cameraX += 0.001;
+            } else if(cameraY > 50) {
+                this.cameraY -= 0.001;
+            } else if(cameraY < -50) {
+                this.cameraY += 0.001;
+            } else { 
+    			this.cameraX += moveVector.x * cameraMoveSpeed * deltaTime;
+    			this.cameraY += moveVector.y * cameraMoveSpeed * deltaTime;
+            }
 		}
 
 		for (WeakReference<Entity> e : this.entities) {
