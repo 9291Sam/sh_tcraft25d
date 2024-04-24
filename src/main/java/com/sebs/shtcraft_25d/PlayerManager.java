@@ -9,6 +9,8 @@ import java.util.InputMismatchException;
 import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
 import com.sebs.shtcraft_25d.SpriteAnimation.AnimationType;
 
+import glm.vec._2.Vec2;
+
 public class PlayerManager implements Renderer.Entity {
 	Renderer renderer;
 	private SpriteAnimation animations;
@@ -30,6 +32,11 @@ public class PlayerManager implements Renderer.Entity {
 	public void tick(double deltaTime) {
 		this.playerX = this.renderer.getCameraXWorld();
 		this.playerY = this.renderer.getCameraYWorld();
+		
+		if (renderer.isKeyPressed(KeyEvent.VK_F))
+		{
+			renderer.getItemManager().registerItem(new Item(Item.Type.Grass, new Vec2(0.5, 0.0)));
+		}
 	}
 
 	/**
@@ -40,6 +47,8 @@ public class PlayerManager implements Renderer.Entity {
 	 */
 	public BufferedImage[] spriteImageDirection() throws IOException, InputMismatchException {
 		int lastKey = 0;
+		
+		// TODO: use move dir vectors
 		if (renderer.isKeyPressed(KeyEvent.VK_A)) {// player moves left
 			lastKey = KeyEvent.VK_A;
 			this.animations.loadAnimations("char_a_p1_0bas_humn_v01.png", "A");

@@ -42,7 +42,7 @@ public class Item implements Renderer.Entity
 		d.drawTexturedRectangleWorld(
 			this.position.x - 0.5 * this.edgeLength, 
 			this.position.y - 0.5 * this.edgeLength,
-			0,
+			4,
 			this.edgeLength,
 			this.edgeLength,
 			this.image
