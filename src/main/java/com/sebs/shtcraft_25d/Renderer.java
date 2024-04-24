@@ -47,7 +47,7 @@ public class Renderer extends JPanel implements KeyListener
 	private double cameraX, cameraY;
 	
 	 // TODO: make a proper Game class that holds world level objects like this
-	private ItemManager itemManager;
+	private WorldEntityManager itemManager;
 	
 	public Renderer()
 	{
@@ -67,7 +67,7 @@ public class Renderer extends JPanel implements KeyListener
 		this.nanosPrev = System.nanoTime();
 		this.cameraX = 0.0;
 		this.cameraY = 0.0;
-		this.itemManager = new ItemManager(this);
+		this.itemManager = new WorldEntityManager(this);
 		this.register(new WeakReference<Entity>(this.itemManager));
 		
 		for (int i = 0; i < 256; ++i)
@@ -86,7 +86,7 @@ public class Renderer extends JPanel implements KeyListener
 		return this.cameraY;
 	}
 	
-	public ItemManager getItemManager()
+	public WorldEntityManager getItemManager()
 	{
 		return this.itemManager;
 	}
@@ -187,10 +187,7 @@ public class Renderer extends JPanel implements KeyListener
 		
 	public void register(WeakReference<Entity> e)
 	{
-		synchronized (this.entities)
-		{
-			this.entities.add(e);
-		}
+		this.entities.add(e);
 	}
 	
 	public boolean shouldClose()
