@@ -33,7 +33,7 @@ public class SpriteAnimation {
 			arr[0] = frames[0][0]; // Backwards
 			animations.put(AnimationType.stand, arr);
 
-		} else if (lastKey == KeyEvent.VK_S) {
+		} else if (lastKey == KeyEvent.VK_W) {
 			arr[0] = frames[1][0]; // forwards
 			animations.put(AnimationType.stand, arr);
 
