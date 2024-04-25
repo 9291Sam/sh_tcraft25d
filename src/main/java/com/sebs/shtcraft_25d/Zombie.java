@@ -34,9 +34,9 @@ public class Zombie extends WorldEntity
 	{			
 		super(Zombie.getZombieImage(), new Vec2(start), 1.0);
 		
-		this.prev = new Vec2(0.0, 0.0);
-		this.dir = new Vec2((Math.random() * 2.0) - 1.0, (Math.random() * 2.0) - 1.0).normalize();
-		this.t = tTravelGoal - 0.00001;
+		this.prev = new Vec2(start);
+		this.dir = new Vec2(0.0);
+		this.t = this.tTravelGoal - 0.01;
 		this.state = State.Travel;
 		
 	}

@@ -17,16 +17,19 @@ public class Shitcraft {
 	private Renderer renderer;
 	private ShitHut testSquare;
 	private WorldManager worldManager;
+	private WorldEntityManager worldEntityManager;
 	private PlayerManager playerManager;
 	private UIManager UIManager;
 	private Inventory inventory;
 
 	public Shitcraft(Renderer renderer_) {
 		this.renderer = renderer_;
+		
+		this.worldEntityManager = new WorldEntityManager(this.renderer);
 
 		this.testSquare = new ShitHut();
 		try {
-			this.playerManager = new PlayerManager(this.renderer);
+			this.playerManager = new PlayerManager(this.renderer, this.worldEntityManager);
 		} catch (InputMismatchException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -42,8 +45,9 @@ public class Shitcraft {
 		renderer.register(new WeakReference<Entity>(this.playerManager));
 		renderer.register(new WeakReference<Entity>(this.UIManager));
 		renderer.register(new WeakReference<Entity>(this.inventory));
+		renderer.register(new WeakReference<Entity>(this.worldEntityManager));
 		
-		this.renderer.getWorldManager().registerWorldEntity(new Zombie(new Vec2(0.0, 0.0)));
+		this.worldEntityManager.registerWorldEntity(new ZombieSpawner(this.worldEntityManager, new Vec2(5.0, 0.0)));
 	}
 
 	private static class ShitHut implements Renderer.Entity {

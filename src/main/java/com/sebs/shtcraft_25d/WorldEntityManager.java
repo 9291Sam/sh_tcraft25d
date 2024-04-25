@@ -46,6 +46,11 @@ public class WorldEntityManager implements Renderer.Entity
 		
 		for (WorldEntity all : this.activeItems)
 		{
+			if (all.getColissionType().equals(ColissionType.NoClollide))
+			{
+				continue;
+			}
+			
 			for (WorldEntity thick : thickEntities)
 			{
 				if (all != thick)

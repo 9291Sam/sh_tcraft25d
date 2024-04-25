@@ -86,6 +86,8 @@ public abstract class WorldEntity implements Renderer.Entity
 		Thick,
 		/// Use this for small things (bullet)
 		Thin,
+		
+		NoClollide
 	}
 }
 

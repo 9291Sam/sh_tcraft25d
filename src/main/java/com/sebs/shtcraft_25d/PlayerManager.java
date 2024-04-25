@@ -26,8 +26,10 @@ public class PlayerManager implements Renderer.Entity {
 	final double playerHeight = 3.0;
 
 	BufferedImage[] sprites;
+	
+	WorldEntityManager worldEntityManager;
 
-	public PlayerManager(Renderer renderer_) throws InputMismatchException, IOException, FileNotFoundException {
+	public PlayerManager(Renderer renderer_, WorldEntityManager worldEntityManager_) throws InputMismatchException, IOException, FileNotFoundException {
 		this.renderer = renderer_;
 		// start reading in animations
 		this.animations = new SpriteAnimation();
@@ -36,6 +38,7 @@ public class PlayerManager implements Renderer.Entity {
 		this.playerX = 0.0;
 		this.playerY = 0.0;
 		this.playerTravelDirection = new Vec2(1.0, 0.0);
+		this.worldEntityManager = worldEntityManager_;
 	}
 
 	@Override
@@ -55,8 +58,8 @@ public class PlayerManager implements Renderer.Entity {
 
 		if (renderer.isKeyPressed(KeyEvent.VK_F)) {
 			if (!wasFireKeyPressed) {
-				renderer.getWorldManager()
-						.registerWorldEntity(new BlasterBullet(new Vec2(playerX, playerY), this.playerTravelDirection));
+				this.worldEntityManager
+					.registerWorldEntity(new BlasterBullet(new Vec2(playerX, playerY), this.playerTravelDirection));
 			}
 			wasFireKeyPressed = true;
 
