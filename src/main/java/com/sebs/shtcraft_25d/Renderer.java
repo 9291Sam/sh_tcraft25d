@@ -3,21 +3,16 @@ package com.sebs.shtcraft_25d;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-import org.apache.commons.lang3.tuple.Pair;
 
 import glm.vec._2.Vec2;
 
@@ -35,9 +30,7 @@ public class Renderer extends JPanel implements KeyListener {
 	private boolean shouldClose;
 	private int windowWidthPx, windowHeightPx;
 	private double cameraX, cameraY;
-
-	// TODO: make a proper Game class that holds world level objects like this
-	private WorldEntityManager itemManager;
+	private final double desiredWidthUnits = 12.5;
 
 	public Renderer() {
 		final int defaultWidth = 600;
@@ -56,8 +49,6 @@ public class Renderer extends JPanel implements KeyListener {
 		this.nanosPrev = System.nanoTime();
 		this.cameraX = 0.0;
 		this.cameraY = 0.0;
-		this.itemManager = new WorldEntityManager(this);
-		this.register(new WeakReference<Entity>(this.itemManager));
 
 		for (int i = 0; i < 256; ++i) {
 			this.isKeyPressed.put(i, false);
@@ -72,10 +63,6 @@ public class Renderer extends JPanel implements KeyListener {
 		return this.cameraY;
 	}
 
-	public WorldEntityManager getWorldManager() {
-		return this.itemManager;
-	}
-
 	@Override
 	public void paintComponent(Graphics g) {
 		this.windowWidthPx = this.getWidth();
@@ -84,7 +71,7 @@ public class Renderer extends JPanel implements KeyListener {
 		super.paintComponent(g);
 
 		DrawCallCollector callCollector = new DrawCallCollector(g, this.cameraX, this.cameraY,
-				10.0 * this.windowWidthPx / this.windowHeightPx, 10.0, this.windowWidthPx, this.windowHeightPx);
+				this.desiredWidthUnits * this.windowWidthPx / this.windowHeightPx, this.desiredWidthUnits, this.windowWidthPx, this.windowHeightPx);
 
 		for (WeakReference<Entity> w : this.entities) {
 			Entity e = w.get();
@@ -164,7 +151,8 @@ public class Renderer extends JPanel implements KeyListener {
 		return this.isKeyPressed.get(Integer.valueOf(k));
 	}
 
-	public void register(WeakReference<Entity> e) {
+	public void register(WeakReference<Entity> e)
+	{
 		this.entities.add(e);
 	}
 
@@ -172,118 +160,7 @@ public class Renderer extends JPanel implements KeyListener {
 		return this.shouldClose;
 	}
 
-	private static double map(double x, double in_min, double in_max, double out_min, double out_max) {
-		return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-	}
-
-	public class DrawCallCollector {
-		private Graphics g;
-		private double cameraX, cameraY;
-		private double cameraWidth, cameraHeight;
-		private double screenPxX, screenPxY;
-		private ArrayList<Pair<Integer, Function<Graphics, Boolean>>> functions;
-
-		public DrawCallCollector(Graphics newG, double newCameraX, double newCameraY, double newCameraWidth,
-				double newCameraHeight, double newScreenPxX, double newScreenPxY) {
-			this.g = newG;
-			this.cameraX = newCameraX;
-			this.cameraY = newCameraY;
-			this.cameraWidth = newCameraWidth;
-			this.cameraHeight = newCameraHeight;
-			this.screenPxX = newScreenPxX;
-			this.screenPxY = newScreenPxY;
-
-			this.functions = new ArrayList<>();
-		}
-
-		// TODO: make *World and *ScreenSpace
-		// takes in normalized coordinates
-		public void drawFilledRectangleScreen(double xScreen, double yScreen, Integer layer, double width,
-				double height, Color color) {
-			Function<Graphics, Boolean> f = (Graphics g) -> {
-				g.setColor(color);
-				g.fillRect((int) (xScreen * this.screenPxX), (int) (yScreen * this.screenPxY),
-						(int) (width * this.screenPxX), (int) (height * this.screenPxY));
-
-				return true;
-			};
-
-			this.functions.add(Pair.of(layer, f));
-		}
-
-		public void drawTexturedRectangleScreen(double xScreen, double yScreen, Integer layer, double width,
-				double height, Image img) {
-			Function<Graphics, Boolean> f = (Graphics g) -> {
-				g.drawImage(img, (int) (xScreen * this.screenPxX), (int) (yScreen * this.screenPxY),
-						(int) (width * this.screenPxX), (int) (height * this.screenPxY), null);
-
-				return true;
-			};
-
-			this.functions.add(Pair.of(layer, f));
-		}
-
-		public void drawFilledRectangleWorld(double xWorld, double yWorld, Integer layer, double width, double height,
-				Color color) {
-			double xScreenPx = Renderer.map(xWorld - this.cameraX, -this.cameraWidth / 2, this.cameraWidth / 2, 0.0,
-					this.screenPxX);
-			double yScreenPx = Renderer.map(yWorld - this.cameraY, this.cameraHeight / 2, -this.cameraHeight / 2, 0.0,
-					this.screenPxY);
-
-			double widthPx = this.screenPxX * width / this.cameraWidth;
-			double heightPx = this.screenPxY * height / this.cameraHeight;
-
-			if (xScreenPx <= -widthPx || xScreenPx >= this.screenPxX || yScreenPx <= -heightPx
-					|| yScreenPx >= this.screenPxY) {
-				return;
-			}
-
-			// thank you java very cool, I love not having ZSTs
-			Function<Graphics, Boolean> f = (Graphics g) -> {
-				g.setColor(color);
-				g.fillRect((int) xScreenPx, (int) yScreenPx, (int) widthPx, (int) heightPx);
-
-				return true;
-			};
-
-			this.functions.add(Pair.of(layer, f));
-		}
-
-		public void drawTexturedRectangleWorld(double xWorld, double yWorld, Integer layer, double width, double height,
-				Image img) {
-			double xScreenPx = Renderer.map(xWorld - this.cameraX, -this.cameraWidth / 2, this.cameraWidth / 2, 0.0,
-					this.screenPxX);
-			double yScreenPx = Renderer.map(yWorld - this.cameraY, this.cameraHeight / 2, -this.cameraHeight / 2, 0.0,
-					this.screenPxY);
-
-			double widthPx = this.screenPxX * width / this.cameraWidth;
-			double heightPx = this.screenPxY * height / this.cameraHeight;
-
-			if (xScreenPx <= -widthPx || xScreenPx >= this.screenPxX || yScreenPx <= -heightPx
-					|| yScreenPx >= this.screenPxY) {
-				return;
-			}
-
-			Function<Graphics, Boolean> f = (Graphics g) -> {
-				this.g.drawImage(img, (int) xScreenPx, (int) yScreenPx, (int) widthPx, (int) heightPx, null);
-
-				return true;
-			};
-
-			this.functions.add(Pair.of(layer, f));
-		}
-
-		public void dispatch() {
-			this.functions.sort((l, r) -> l.getLeft().compareTo(r.getLeft()));
-
-			for (Pair<Integer, Function<Graphics, Boolean>> f : this.functions) {
-				Function<Graphics, Boolean> func = f.getRight();
-
-				func.apply(this.g);
-			}
-		}
-
-	}
+	
 
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Shitcraft");

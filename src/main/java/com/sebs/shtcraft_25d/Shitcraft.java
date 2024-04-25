@@ -9,25 +9,27 @@ import java.util.InputMismatchException;
 
 import javax.imageio.ImageIO;
 
-import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
 import com.sebs.shtcraft_25d.Renderer.Entity;
 
 import glm.vec._2.Vec2;
 
 public class Shitcraft {
 	private Renderer renderer;
-	private TestSquare testSquare;
+	private ShitHut testSquare;
 	private WorldManager worldManager;
+	private WorldEntityManager worldEntityManager;
 	private PlayerManager playerManager;
 	private UIManager UIManager;
 	private Inventory inventory;
 
 	public Shitcraft(Renderer renderer_) {
 		this.renderer = renderer_;
+		
+		this.worldEntityManager = new WorldEntityManager(this.renderer);
 
-		this.testSquare = new TestSquare();
+		this.testSquare = new ShitHut();
 		try {
-			this.playerManager = new PlayerManager(this.renderer);
+			this.playerManager = new PlayerManager(this.renderer, this.worldEntityManager);
 		} catch (InputMismatchException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -43,15 +45,16 @@ public class Shitcraft {
 		renderer.register(new WeakReference<Entity>(this.playerManager));
 		renderer.register(new WeakReference<Entity>(this.UIManager));
 		renderer.register(new WeakReference<Entity>(this.inventory));
+		renderer.register(new WeakReference<Entity>(this.worldEntityManager));
 		
-		this.renderer.getWorldManager().registerWorldEntity(new Zombie(new Vec2(0.0, 0.0)));
+		this.worldEntityManager.registerWorldEntity(new ZombieSpawner(this.worldEntityManager, new Vec2(5.0, 0.0), (i) -> {this.inventory.addCoins(i); return true;}));
 	}
 
-	private static class TestSquare implements Renderer.Entity {
+	private static class ShitHut implements Renderer.Entity {
 		private double timeAlive = 0.0;
 		private Image demo;
 
-		TestSquare() {
+		ShitHut() {
 			try {
 				this.demo = ImageIO.read(new File("ShitHut.png"));
 			} catch (IOException e) {
@@ -66,23 +69,8 @@ public class Shitcraft {
 
 		@Override
 		public void draw(DrawCallCollector d) {
-			d.drawFilledRectangleWorld(Math.cos(this.timeAlive), Math.sin(this.timeAlive), 1, 1.0, 1.0, Color.CYAN);
 			d.drawTexturedRectangleWorld(-2.5, 2.8, 1, 4.0, 4.0, this.demo);
 		}
 	}
-
-	/*
-	 * private static class TestStatus implements Renderer.Entity { private double
-	 * timeAlive = 0.0;
-	 * 
-	 * TestStatus(){}
-	 * 
-	 * @Override public void tick(double deltaTime) { this.timeAlive += deltaTime; }
-	 * 
-	 * @Override public void draw(DrawCallCollector d) { d.drawFilledRectangle(-60,
-	 * Math.cos(this.timeAlive), 2, 1.0, 1.0, Color.RED); }
-	 * 
-	 * }
-	 */
 
 }

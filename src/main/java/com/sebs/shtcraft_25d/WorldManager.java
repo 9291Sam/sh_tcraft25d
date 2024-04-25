@@ -9,8 +9,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
-
 public class WorldManager implements Renderer.Entity
 {
     Renderer renderer;
@@ -68,7 +66,7 @@ public class WorldManager implements Renderer.Entity
         {
             for (int j = -50; j < 50; ++j)
             {
-                d.drawTexturedRectangleWorld((double)i, (double)j, -1, 1.0, 1.0, this.stone);
+                d.drawTexturedRectangleWorld((double)i, (double)j, -1, 1.01, 1.01, this.stone);
             }
         }
         
@@ -85,7 +83,7 @@ public class WorldManager implements Renderer.Entity
     private void drawRect(DrawCallCollector d, int centerX, int centerY, int width, int height) {
         for (int i = centerX - width / 2; i < centerX + width / 2; ++i) {
             for (int k = centerY - height / 2; k < centerY + height / 2; ++k ) {
-                d.drawTexturedRectangleWorld((double)i + 1, (double)k, 0, 1.0, 1.0, this.grass);
+                d.drawTexturedRectangleWorld((double)i + 1, (double)k, 0, 1.01, 1.01, this.grass);
             }
         }
     }

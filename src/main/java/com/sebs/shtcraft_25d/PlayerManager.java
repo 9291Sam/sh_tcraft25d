@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.InputMismatchException;
 
-import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
 import com.sebs.shtcraft_25d.SpriteAnimation.AnimationType;
 
 import glm.vec._2.Vec2;
@@ -33,7 +32,10 @@ public class PlayerManager implements Renderer.Entity {
 	private final double FRAME_DURATION = 0.1;
 	BufferedImage[] sprites;
 
-	public PlayerManager(Renderer renderer_) throws InputMismatchException, IOException, FileNotFoundException {
+	WorldEntityManager worldEntityManager;
+
+	public PlayerManager(Renderer renderer_, WorldEntityManager worldEntityManager_)
+			throws InputMismatchException, IOException, FileNotFoundException {
 		this.renderer = renderer_;
 		// start reading in animations
 		this.animations = new SpriteAnimation();
@@ -44,6 +46,7 @@ public class PlayerManager implements Renderer.Entity {
 		this.playerY = 0.0;
 		this.playerTravelDirection = new Vec2(1.0, 0.0);
 		this.lastKey = 0;
+		this.worldEntityManager = worldEntityManager_;
 	}
 
 	@Override
@@ -65,7 +68,7 @@ public class PlayerManager implements Renderer.Entity {
 
 		if (renderer.isKeyPressed(KeyEvent.VK_F)) {
 			if (!wasFireKeyPressed) {
-				renderer.getWorldManager()
+				this.worldEntityManager
 						.registerWorldEntity(new BlasterBullet(new Vec2(playerX, playerY), this.playerTravelDirection));
 			}
 			wasFireKeyPressed = true;

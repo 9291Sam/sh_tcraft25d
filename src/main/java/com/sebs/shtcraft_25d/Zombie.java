@@ -4,10 +4,11 @@ import java.awt.Color;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.function.Function;
 
 import javax.imageio.ImageIO;
 
-import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
+import com.sun.org.apache.bcel.internal.util.Args;
 
 import glm.vec._2.Vec2;
 
@@ -18,7 +19,7 @@ public class Zombie extends WorldEntity
 	{
 		if (Zombie.zombieImage == null)
 		{
-			Zombie.zombieImage = Utils.loadImage("demo.jpeg");
+			Zombie.zombieImage = Utils.loadImage("zombie.jpeg");
 		}
 		
 		return Zombie.zombieImage;
@@ -29,15 +30,17 @@ public class Zombie extends WorldEntity
 	private final double tTravelGoal = 3.0;
 	private double t = 0;
 	private State state;
+	private Function<Integer, Boolean> addCoinsFunc;
 	
-	Zombie(Vec2 start)
-	{	
+	Zombie(Vec2 start, Function<Integer, Boolean> addCoinsFunc_)
+	{			
 		super(Zombie.getZombieImage(), new Vec2(start), 1.0);
 		
-		this.prev = new Vec2(0.0, 0.0);
-		this.dir = new Vec2((Math.random() * 2.0) - 1.0, (Math.random() * 2.0) - 1.0).normalize();
-		this.t = tTravelGoal - 0.00001;
+		this.prev = new Vec2(start);
+		this.dir = new Vec2(0.0);
+		this.t = this.tTravelGoal - 0.01;
 		this.state = State.Travel;
+		this.addCoinsFunc = addCoinsFunc_;
 		
 	}
 	
@@ -91,22 +94,9 @@ public class Zombie extends WorldEntity
 			break;
 		}
 		
-
 		
-	}
-
-	@Override
-	public void draw(DrawCallCollector d)
-	{					
-		Vec2 pos = this.calculateCurrentPos();
+		this.position = this.calculateCurrentPos();
 		
-		d.drawFilledRectangleWorld(
-				pos.x,
-				pos.y,
-				1,
-				this.edgeLength,
-				this.edgeLength,
-				Color.RED);
 	}
 	
 	private enum State
@@ -120,5 +110,17 @@ public class Zombie extends WorldEntity
 	{
 		return ColissionType.Thick;
 	}
+
+	@Override
+	protected void collissionWith(WorldEntity e)
+	{
+		if (this.isAlive)
+		{
+			this.addCoinsFunc.apply((int)Utils.map(Math.random(), 0.0, 1.0,  2.0, 6.0));
+		}
+		this.isAlive = false;
+	}
+	
+
 }
 
