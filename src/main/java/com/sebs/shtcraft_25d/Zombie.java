@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
+import com.sun.org.apache.bcel.internal.util.Args;
 
 import glm.vec._2.Vec2;
 
@@ -18,7 +18,7 @@ public class Zombie extends WorldEntity
 	{
 		if (Zombie.zombieImage == null)
 		{
-			Zombie.zombieImage = Utils.loadImage("demo.jpeg");
+			Zombie.zombieImage = Utils.loadImage("zombie.jpeg");
 		}
 		
 		return Zombie.zombieImage;
@@ -31,7 +31,7 @@ public class Zombie extends WorldEntity
 	private State state;
 	
 	Zombie(Vec2 start)
-	{	
+	{			
 		super(Zombie.getZombieImage(), new Vec2(start), 1.0);
 		
 		this.prev = new Vec2(0.0, 0.0);
@@ -91,22 +91,9 @@ public class Zombie extends WorldEntity
 			break;
 		}
 		
-
 		
-	}
-
-	@Override
-	public void draw(DrawCallCollector d)
-	{					
-		Vec2 pos = this.calculateCurrentPos();
+		this.position = this.calculateCurrentPos();
 		
-		d.drawFilledRectangleWorld(
-				pos.x,
-				pos.y,
-				1,
-				this.edgeLength,
-				this.edgeLength,
-				Color.RED);
 	}
 	
 	private enum State
@@ -120,5 +107,13 @@ public class Zombie extends WorldEntity
 	{
 		return ColissionType.Thick;
 	}
+
+	@Override
+	protected void collissionWith(WorldEntity e)
+	{
+		this.isAlive = false;
+	}
+	
+
 }
 

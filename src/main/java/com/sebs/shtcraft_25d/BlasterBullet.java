@@ -22,6 +22,11 @@ public class BlasterBullet extends WorldEntity
 		
 		return BlasterBullet.maybeBlasterImage;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return String.format("Blaster Bullet @ %s", this.position);	}
 
 	public BlasterBullet(Vec2 position_, Vec2 dir_)
 	{
@@ -65,6 +70,12 @@ public class BlasterBullet extends WorldEntity
 	protected ColissionType getColissionType()
 	{
 		return ColissionType.Thin;
+	}
+
+	@Override
+	protected void collissionWith(WorldEntity e)
+	{
+		this.isAlive = false;
 	}
 
 }

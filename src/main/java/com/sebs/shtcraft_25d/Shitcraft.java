@@ -9,14 +9,13 @@ import java.util.InputMismatchException;
 
 import javax.imageio.ImageIO;
 
-import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
 import com.sebs.shtcraft_25d.Renderer.Entity;
 
 import glm.vec._2.Vec2;
 
 public class Shitcraft {
 	private Renderer renderer;
-	private TestSquare testSquare;
+	private ShitHut testSquare;
 	private WorldManager worldManager;
 	private PlayerManager playerManager;
 	private UIManager UIManager;
@@ -25,7 +24,7 @@ public class Shitcraft {
 	public Shitcraft(Renderer renderer_) {
 		this.renderer = renderer_;
 
-		this.testSquare = new TestSquare();
+		this.testSquare = new ShitHut();
 		try {
 			this.playerManager = new PlayerManager(this.renderer);
 		} catch (InputMismatchException | IOException e) {
@@ -47,11 +46,11 @@ public class Shitcraft {
 		this.renderer.getWorldManager().registerWorldEntity(new Zombie(new Vec2(0.0, 0.0)));
 	}
 
-	private static class TestSquare implements Renderer.Entity {
+	private static class ShitHut implements Renderer.Entity {
 		private double timeAlive = 0.0;
 		private Image demo;
 
-		TestSquare() {
+		ShitHut() {
 			try {
 				this.demo = ImageIO.read(new File("ShitHut.png"));
 			} catch (IOException e) {
@@ -66,23 +65,8 @@ public class Shitcraft {
 
 		@Override
 		public void draw(DrawCallCollector d) {
-			d.drawFilledRectangleWorld(Math.cos(this.timeAlive), Math.sin(this.timeAlive), 1, 1.0, 1.0, Color.CYAN);
 			d.drawTexturedRectangleWorld(-2.5, 2.8, 1, 4.0, 4.0, this.demo);
 		}
 	}
-
-	/*
-	 * private static class TestStatus implements Renderer.Entity { private double
-	 * timeAlive = 0.0;
-	 * 
-	 * TestStatus(){}
-	 * 
-	 * @Override public void tick(double deltaTime) { this.timeAlive += deltaTime; }
-	 * 
-	 * @Override public void draw(DrawCallCollector d) { d.drawFilledRectangle(-60,
-	 * Math.cos(this.timeAlive), 2, 1.0, 1.0, Color.RED); }
-	 * 
-	 * }
-	 */
 
 }

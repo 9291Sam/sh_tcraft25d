@@ -6,7 +6,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
 import com.sebs.shtcraft_25d.Renderer.Entity;
 import com.sebs.shtcraft_25d.WorldEntity.ColissionType;
 
@@ -53,7 +52,8 @@ public class WorldEntityManager implements Renderer.Entity
 				{
 					if (thick.getBoundingBox().collidesWith(all.getBoundingBox()))
 					{
-						System.out.printf("Colission detected %s %s\n", all.toString(), thick.toString());
+						all.collissionWith(thick);
+						thick.collissionWith(all);
 					}
 				}
 				

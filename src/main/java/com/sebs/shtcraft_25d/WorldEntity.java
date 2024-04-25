@@ -2,8 +2,7 @@ package com.sebs.shtcraft_25d;
 
 import java.awt.Image;
 
-import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
-import com.sebs.shtcraft_25d.WorldEntity.BoundingBox;
+import com.sebs.shtcraft_25d.WorldEntity.BoundingSphere;
 
 import glm.vec._2.Vec2;
 
@@ -46,35 +45,38 @@ public abstract class WorldEntity implements Renderer.Entity
 		}
 	}
 	
-	protected BoundingBox getBoundingBox()
+	protected BoundingSphere getBoundingBox()
 	{
-		return new BoundingBox(
-			new Vec2(this.position),
-			new Vec2(this.position).add((float)this.edgeLength)
+		return new BoundingSphere(
+			new Vec2(this.position).add(new Vec2(0.0, -(float)this.edgeLength)),
+			this.edgeLength / 2
 		);
 		
 	}
+	protected abstract void collissionWith(WorldEntity e);
 	protected abstract ColissionType getColissionType();
 	
-	public class BoundingBox
+	public class BoundingSphere
 	{
-	    private Vec2 topLeft;
-	    private Vec2 bottomRight;
+	    private Vec2 center;
+	    private double radius;
 
-	    public BoundingBox(Vec2 topLeft_, Vec2 botRight_)
+    	@Override
+    	public String toString()
+    	{
+    		return String.format("Bounding Sphere %s %f", this.center.toString(), this.radius);
+    	}
+	    
+	    public BoundingSphere(Vec2 center_, double radius_)
 	    {
-	    	this.topLeft = topLeft_;
-	    	this.bottomRight = botRight_;
+	    	this.center = center_;
+	    	this.radius = radius_;
 	    }
 
-	    public boolean collidesWith(BoundingBox other) {
-	    	 Vec2 delta = new Vec2(
-		        Math.abs(topLeft.x - other.topLeft.x) - (bottomRight.x - topLeft.x) - (other.bottomRight.x - other.topLeft.x),
-		        Math.abs(topLeft.y - other.topLeft.y) - (bottomRight.y - topLeft.y) - (other.bottomRight.y - other.topLeft.y)
-		    );
-
-		    return (delta.x < 0) && (delta.y < 0);
-	    }
+	    public boolean collidesWith(BoundingSphere other)
+	    {
+	    	return new Vec2(this.center).sub(other.center).length() < (this.radius + other.radius);
+    	}
 	}
 	
 	// Thin <=> Thin collisions are assumed to not be possible

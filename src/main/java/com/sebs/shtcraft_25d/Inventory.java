@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 
-import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
-
 public class Inventory implements Renderer.Entity{
 	private Renderer renderer;
 	private Image blaster1;
