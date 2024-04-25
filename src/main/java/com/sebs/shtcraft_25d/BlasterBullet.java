@@ -72,4 +72,10 @@ public class BlasterBullet extends WorldEntity
 		return ColissionType.Thin;
 	}
 
+	@Override
+	protected void collissionWith(WorldEntity e)
+	{
+		this.isAlive = false;
+	}
+
 }

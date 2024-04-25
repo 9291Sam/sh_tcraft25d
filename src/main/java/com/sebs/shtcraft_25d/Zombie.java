@@ -47,8 +47,7 @@ public class Zombie extends WorldEntity
 		
 		workingPos.add(new Vec2(this.dir).mul((float)this.t));
 		
-//		return workingPos;
-		return new Vec2(12.5, 3.2);
+		return workingPos;
 	}
 	
 	@Override public String toString()
@@ -108,5 +107,13 @@ public class Zombie extends WorldEntity
 	{
 		return ColissionType.Thick;
 	}
+
+	@Override
+	protected void collissionWith(WorldEntity e)
+	{
+		this.isAlive = false;
+	}
+	
+
 }
 

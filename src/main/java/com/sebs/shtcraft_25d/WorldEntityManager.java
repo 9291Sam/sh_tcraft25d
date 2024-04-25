@@ -52,7 +52,8 @@ public class WorldEntityManager implements Renderer.Entity
 				{
 					if (thick.getBoundingBox().collidesWith(all.getBoundingBox()))
 					{
-						System.out.printf("Colission detected %s %s\n", thick.getBoundingBox(), all.getBoundingBox());
+						all.collissionWith(thick);
+						thick.collissionWith(all);
 					}
 				}
 				

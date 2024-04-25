@@ -53,6 +53,7 @@ public abstract class WorldEntity implements Renderer.Entity
 		);
 		
 	}
+	protected abstract void collissionWith(WorldEntity e);
 	protected abstract ColissionType getColissionType();
 	
 	public class BoundingSphere
