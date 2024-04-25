@@ -30,6 +30,7 @@ public class Renderer extends JPanel implements KeyListener {
 	private boolean shouldClose;
 	private int windowWidthPx, windowHeightPx;
 	private double cameraX, cameraY;
+	private final double desiredWidthUnits = 12.5;
 
 	public Renderer() {
 		final int defaultWidth = 600;
@@ -70,7 +71,7 @@ public class Renderer extends JPanel implements KeyListener {
 		super.paintComponent(g);
 
 		DrawCallCollector callCollector = new DrawCallCollector(g, this.cameraX, this.cameraY,
-				10.0 * this.windowWidthPx / this.windowHeightPx, 10.0, this.windowWidthPx, this.windowHeightPx);
+				this.desiredWidthUnits * this.windowWidthPx / this.windowHeightPx, this.desiredWidthUnits, this.windowWidthPx, this.windowHeightPx);
 
 		for (WeakReference<Entity> w : this.entities) {
 			Entity e = w.get();

@@ -47,7 +47,7 @@ public class Shitcraft {
 		renderer.register(new WeakReference<Entity>(this.inventory));
 		renderer.register(new WeakReference<Entity>(this.worldEntityManager));
 		
-		this.worldEntityManager.registerWorldEntity(new ZombieSpawner(this.worldEntityManager, new Vec2(5.0, 0.0)));
+		this.worldEntityManager.registerWorldEntity(new ZombieSpawner(this.worldEntityManager, new Vec2(5.0, 0.0), (i) -> {this.inventory.addCoins(i); return true;}));
 	}
 
 	private static class ShitHut implements Renderer.Entity {

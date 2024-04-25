@@ -9,7 +9,6 @@ import glm.vec._2.Vec2;
 
 public abstract class WorldEntity implements Renderer.Entity
 {
-	
 	boolean isAlive;
 	Image image;
 	Vec2 position;
