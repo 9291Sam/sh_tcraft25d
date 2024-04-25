@@ -65,7 +65,6 @@ public class Shitcraft {
 
 		@Override
 		public void draw(DrawCallCollector d) {
-			d.drawFilledRectangleWorld(12.5, 3.2, 5, 0.1, 0.1, Color.CYAN);
 			d.drawTexturedRectangleWorld(-2.5, 2.8, 1, 4.0, 4.0, this.demo);
 		}
 	}

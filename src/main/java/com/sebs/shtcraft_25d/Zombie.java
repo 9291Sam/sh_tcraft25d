@@ -7,6 +7,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import com.sun.org.apache.bcel.internal.util.Args;
+
 import glm.vec._2.Vec2;
 
 public class Zombie extends WorldEntity
@@ -29,7 +31,7 @@ public class Zombie extends WorldEntity
 	private State state;
 	
 	Zombie(Vec2 start)
-	{	
+	{			
 		super(Zombie.getZombieImage(), new Vec2(start), 1.0);
 		
 		this.prev = new Vec2(0.0, 0.0);
