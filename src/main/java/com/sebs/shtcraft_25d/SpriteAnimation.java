@@ -26,25 +26,24 @@ public class SpriteAnimation {
 		SpriteSheetLoader loader = new SpriteSheetLoader(file, 64, 64);
 		BufferedImage[][] frames = loader.getFrames();
 		// frames loads all subimages based on their columns and rows respectively.
-		// input frames[col][row] to pull subimage and organize into enums.
-		final int MAX_SIZE = 6;
-		BufferedImage[] arr = new BufferedImage[MAX_SIZE];
+		// input frames[row][col] to pull subimage and organize into enums.
+		BufferedImage[] arr = new BufferedImage[1];
 
 		if (lastKey == KeyEvent.VK_S) {
 			arr[0] = frames[0][0]; // Backwards
-			animations.put(AnimationType.stand_B, arr);
+			animations.put(AnimationType.stand, arr);
 
 		} else if (lastKey == KeyEvent.VK_S) {
-			arr[0] = frames[0][1]; // forwards
-			animations.put(AnimationType.stand_F, arr);
+			arr[0] = frames[1][0]; // forwards
+			animations.put(AnimationType.stand, arr);
 
-		} else if (lastKey == KeyEvent.VK_S) {
-			arr[0] = frames[0][3]; // Left
-			animations.put(AnimationType.stand_R, arr);
+		} else if (lastKey == KeyEvent.VK_D) {
+			arr[0] = frames[2][0]; // right
+			animations.put(AnimationType.stand, arr);
 
-		} else if (lastKey == KeyEvent.VK_W) {
-			arr[0] = frames[0][2]; // Right
-			animations.put(AnimationType.stand_L, arr);
+		} else if (lastKey == KeyEvent.VK_A) {
+			arr[0] = frames[3][0]; // left
+			animations.put(AnimationType.stand, arr);
 
 		}
 
@@ -58,8 +57,9 @@ public class SpriteAnimation {
 		BufferedImage[][] frames = loader.getFrames();
 		// frames loads all subimages based on their columns and rows respectively.
 		// input frames[col][row] to pull subimage and organize into enums.
-		final int MAX_SIZE = 6;
-		BufferedImage[] arr = new BufferedImage[MAX_SIZE];
+
+		// max array size = 6
+		BufferedImage[] arr = new BufferedImage[6];
 
 		/**************** STAND ANIMATIONS *************************/
 //		arr[0] = frames[0][1]; // forwards
@@ -78,7 +78,7 @@ public class SpriteAnimation {
 		// walk_F
 		if (key == "W") {
 			for (int i = 0; i < 6; i++) {
-				arr[0] = frames[5][i];
+				arr[i] = frames[5][i];
 				animations.put(AnimationType.walk_F, arr);
 				// wait for the frame
 			}
@@ -94,7 +94,7 @@ public class SpriteAnimation {
 		// walk_B
 		if (key == "S") {
 			for (int i = 0; i < 6; i++) {
-				arr[0] = frames[4][i];
+				arr[i] = frames[4][i];
 				animations.put(AnimationType.walk_B, arr);
 				// wait for the frame
 			}
@@ -110,7 +110,7 @@ public class SpriteAnimation {
 		// walk_L
 		if (key == "A") {
 			for (int i = 0; i < 6; i++) {
-				arr[0] = frames[7][i];
+				arr[i] = frames[7][i];
 				animations.put(AnimationType.walk_L, arr);
 				// wait for the frame
 			}
@@ -126,7 +126,7 @@ public class SpriteAnimation {
 		// walk_R
 		if (key == "D") {
 			for (int i = 0; i < 6; i++) {
-				arr[0] = frames[6][i];
+				arr[i] = frames[6][i];
 				animations.put(AnimationType.walk_R, arr);
 				// wait for the frame
 			}
@@ -172,7 +172,6 @@ public class SpriteAnimation {
 	}
 
 	public enum AnimationType {
-		walk_F, walk_B, walk_L, walk_R, run_F, run_B, run_L, run_R, stand_F, stand_B, stand_L, stand_R, jump_F, jump_B,
-		jump_L, jump_R,
+		walk_F, walk_B, walk_L, walk_R, run_F, run_B, run_L, run_R, stand, jump_F, jump_B, jump_L, jump_R,
 	}
 }
