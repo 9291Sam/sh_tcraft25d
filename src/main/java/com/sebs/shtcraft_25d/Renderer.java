@@ -31,9 +31,6 @@ public class Renderer extends JPanel implements KeyListener {
 	private int windowWidthPx, windowHeightPx;
 	private double cameraX, cameraY;
 
-	// TODO: make a proper Game class that holds world level objects like this
-	private WorldEntityManager itemManager;
-
 	public Renderer() {
 		final int defaultWidth = 600;
 		final int defaultHeight = 600;
@@ -51,8 +48,6 @@ public class Renderer extends JPanel implements KeyListener {
 		this.nanosPrev = System.nanoTime();
 		this.cameraX = 0.0;
 		this.cameraY = 0.0;
-		this.itemManager = new WorldEntityManager(this);
-		this.register(new WeakReference<Entity>(this.itemManager));
 
 		for (int i = 0; i < 256; ++i) {
 			this.isKeyPressed.put(i, false);
@@ -65,10 +60,6 @@ public class Renderer extends JPanel implements KeyListener {
 
 	public double getCameraYWorld() {
 		return this.cameraY;
-	}
-
-	public WorldEntityManager getWorldManager() {
-		return this.itemManager;
 	}
 
 	@Override
@@ -159,7 +150,8 @@ public class Renderer extends JPanel implements KeyListener {
 		return this.isKeyPressed.get(Integer.valueOf(k));
 	}
 
-	public void register(WeakReference<Entity> e) {
+	public void register(WeakReference<Entity> e)
+	{
 		this.entities.add(e);
 	}
 
@@ -167,9 +159,7 @@ public class Renderer extends JPanel implements KeyListener {
 		return this.shouldClose;
 	}
 
-	public static double map(double x, double in_min, double in_max, double out_min, double out_max) {
-		return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-	}
+	
 
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Shitcraft");

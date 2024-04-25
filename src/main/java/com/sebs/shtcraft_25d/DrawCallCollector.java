@@ -57,9 +57,9 @@ public class DrawCallCollector {
 
 	public void drawFilledRectangleWorld(double xWorld, double yWorld, Integer layer, double width, double height,
 			Color color) {
-		double xScreenPx = Renderer.map(xWorld - this.cameraX, -this.cameraWidth / 2, this.cameraWidth / 2, 0.0,
+		double xScreenPx = Utils.map(xWorld - this.cameraX, -this.cameraWidth / 2, this.cameraWidth / 2, 0.0,
 				this.screenPxX);
-		double yScreenPx = Renderer.map(yWorld - this.cameraY, this.cameraHeight / 2, -this.cameraHeight / 2, 0.0,
+		double yScreenPx = Utils.map(yWorld - this.cameraY, this.cameraHeight / 2, -this.cameraHeight / 2, 0.0,
 				this.screenPxY);
 
 		double widthPx = this.screenPxX * width / this.cameraWidth;
@@ -83,9 +83,9 @@ public class DrawCallCollector {
 
 	public void drawTexturedRectangleWorld(double xWorld, double yWorld, Integer layer, double width, double height,
 			Image img) {
-		double xScreenPx = Renderer.map(xWorld - this.cameraX, -this.cameraWidth / 2, this.cameraWidth / 2, 0.0,
+		double xScreenPx = Utils.map(xWorld - this.cameraX, -this.cameraWidth / 2, this.cameraWidth / 2, 0.0,
 				this.screenPxX);
-		double yScreenPx = Renderer.map(yWorld - this.cameraY, this.cameraHeight / 2, -this.cameraHeight / 2, 0.0,
+		double yScreenPx = Utils.map(yWorld - this.cameraY, this.cameraHeight / 2, -this.cameraHeight / 2, 0.0,
 				this.screenPxY);
 
 		double widthPx = this.screenPxX * width / this.cameraWidth;
