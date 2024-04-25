@@ -2,8 +2,6 @@ package com.sebs.shtcraft_25d;
 
 import java.awt.Color;
 
-import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
-
 public class UIManager implements Renderer.Entity
 {
     private Renderer renderer;

@@ -7,8 +7,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
-
 import glm.vec._2.Vec2;
 
 public class Zombie extends WorldEntity
@@ -18,7 +16,7 @@ public class Zombie extends WorldEntity
 	{
 		if (Zombie.zombieImage == null)
 		{
-			Zombie.zombieImage = Utils.loadImage("demo.jpeg");
+			Zombie.zombieImage = Utils.loadImage("zombie.jpeg");
 		}
 		
 		return Zombie.zombieImage;
@@ -47,7 +45,8 @@ public class Zombie extends WorldEntity
 		
 		workingPos.add(new Vec2(this.dir).mul((float)this.t));
 		
-		return workingPos;
+//		return workingPos;
+		return new Vec2(12.5, 3.2);
 	}
 	
 	@Override public String toString()
@@ -91,22 +90,9 @@ public class Zombie extends WorldEntity
 			break;
 		}
 		
-
 		
-	}
-
-	@Override
-	public void draw(DrawCallCollector d)
-	{					
-		Vec2 pos = this.calculateCurrentPos();
+		this.position = this.calculateCurrentPos();
 		
-		d.drawFilledRectangleWorld(
-				pos.x,
-				pos.y,
-				1,
-				this.edgeLength,
-				this.edgeLength,
-				Color.RED);
 	}
 	
 	private enum State

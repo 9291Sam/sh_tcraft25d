@@ -9,8 +9,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
-
 public class WorldManager implements Renderer.Entity
 {
     Renderer renderer;

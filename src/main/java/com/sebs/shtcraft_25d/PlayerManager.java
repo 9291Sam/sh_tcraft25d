@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.InputMismatchException;
 
-import com.sebs.shtcraft_25d.Renderer.DrawCallCollector;
 import com.sebs.shtcraft_25d.SpriteAnimation.AnimationType;
 
 import glm.vec._2.Vec2;
