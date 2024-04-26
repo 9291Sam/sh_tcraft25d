@@ -71,7 +71,7 @@ public class Inventory implements Renderer.Entity{
 	private double getCurrentMulti(double currentMulti) {
 		double num = 0;
 		if (currentMulti == 0.1) {
-			num = Utils.map(currentGold, 0.0, 10.0, 0.0, 1.0);
+			num = Utils.map(currentGold, 0.0, 25.0, 0.0, 1.0);
 		} else if (currentMulti == 0.01) {
 			num = Utils.map(currentGold, 10.0, 100.0, 0.0, 1.0);
 		} else {
