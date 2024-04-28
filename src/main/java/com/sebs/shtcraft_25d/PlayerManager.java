@@ -2,9 +2,17 @@ package com.sebs.shtcraft_25d;
 
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.InputMismatchException;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import com.sebs.shtcraft_25d.SpriteAnimation.AnimationType;
 
@@ -70,6 +78,34 @@ public class PlayerManager implements Renderer.Entity {
 			if (!wasFireKeyPressed) {
 				this.worldEntityManager
 						.registerWorldEntity(new BlasterBullet(new Vec2(playerX, playerY), this.playerTravelDirection));
+				File f = new File("pk-fire-sound-effect-made-with-Voicemod.wav");
+			    AudioInputStream audioIn = null;
+				try {
+					audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
+				} catch (MalformedURLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (UnsupportedAudioFileException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}  
+			    Clip clip = null;
+				try {
+					clip = AudioSystem.getClip();
+				} catch (LineUnavailableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			    try {
+					clip.open(audioIn);
+				} catch (LineUnavailableException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			    clip.start();
 			}
 			wasFireKeyPressed = true;
 
