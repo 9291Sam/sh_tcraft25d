@@ -33,6 +33,17 @@ public class PlayerManager implements Renderer.Entity {
 	BufferedImage[] sprites;
 
 	WorldEntityManager worldEntityManager;
+	
+	public Vec2 getPosition()
+	{
+		return new Vec2(this.playerX, this.playerY);
+	}
+	
+	public Vec2 getDimensions()
+	{
+		return new Vec2(this.playerWidth, this.playerHeight);
+		
+	}
 
 	public PlayerManager(Renderer renderer_, WorldEntityManager worldEntityManager_)
 			throws InputMismatchException, IOException, FileNotFoundException {
