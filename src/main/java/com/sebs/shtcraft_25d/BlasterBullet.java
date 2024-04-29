@@ -75,7 +75,10 @@ public class BlasterBullet extends WorldEntity
 	@Override
 	protected void collissionWith(WorldEntity e)
 	{
-		this.isAlive = false;
+		if (!(e instanceof PlayerColissionTracker))
+		{
+			this.isAlive = false;
+		}
 	}
 
 }
