@@ -24,5 +24,20 @@ public class Utils
 	{
 		return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 	}
+	
+	public static double clamp(double x, double min, double max)
+	{
+		if (x < min)
+		{
+			return min;
+		}
+		
+		if (x > max)
+		{
+			return max;
+		}
+		
+		return x;
+	}
 
 }

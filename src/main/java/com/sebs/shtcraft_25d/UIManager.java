@@ -5,6 +5,7 @@ import java.awt.Color;
 public class UIManager implements Renderer.Entity
 {
     private Renderer renderer;
+    double percent = 1.0;
     
     public UIManager(Renderer renderer)
     {
@@ -13,13 +14,18 @@ public class UIManager implements Renderer.Entity
     
     @Override
     public void tick(double deltaTime) {}
+    
+    public void increaseByPercent(double p)
+    {
+    	this.percent = Utils.clamp(this.percent + p, 0.0, 1.0);
+    }
 
     @Override
     public void draw(DrawCallCollector d)
     {
     	// TODO: do dynamic things
     	d.drawFilledRectangleScreen(0.0, 0.95, 24, 0.25, 0.1, Color.GRAY);
-    	d.drawFilledRectangleScreen(0.025, 0.9675, 25, 0.2, 0.025, Color.RED);
+    	d.drawFilledRectangleScreen(0.025, 0.9675, 25, 0.2 * this.percent, 0.025, Color.RED);
     }
 
 }

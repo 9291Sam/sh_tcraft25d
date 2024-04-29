@@ -113,6 +113,11 @@ public class Zombie extends WorldEntity
 	@Override
 	protected void collissionWith(WorldEntity e)
 	{
+		if (e instanceof Zombie)
+		{
+			return;
+		}
+		
 		if (this.isAlive)
 		{
 			this.addCoinsFunc.apply((int)Utils.map(Math.random(), 0.0, 1.0,  2.0, 6.0));
