@@ -41,6 +41,17 @@ public class PlayerManager implements Renderer.Entity {
 	BufferedImage[] sprites;
 
 	WorldEntityManager worldEntityManager;
+	
+	public Vec2 getPosition()
+	{
+		return new Vec2(this.playerX, this.playerY);
+	}
+	
+	public Vec2 getDimensions()
+	{
+		return new Vec2(this.playerWidth, this.playerHeight);
+		
+	}
 
 	public PlayerManager(Renderer renderer_, WorldEntityManager worldEntityManager_)
 			throws InputMismatchException, IOException, FileNotFoundException {
@@ -162,18 +173,18 @@ public class PlayerManager implements Renderer.Entity {
 
 				int frameIndex = (int) ((this.timeAlive / FRAME_DURATION) % this.sprites.length);
 
-				// set frame
-				// pp should always be long
-				// i.e. no null frame data
-				System.out.println(frameIndex);
-				String pp = "";
-				if (sprites[frameIndex] == null) {
-					pp = "PP_small";
-
-				} else {
-					pp = "pp_LONG";
-				}
-				System.out.println("\n" + pp);
+//				// set frame
+//				// pp should always be long
+//				// i.e. no null frame data
+//				System.out.println(frameIndex);
+//				String pp = "";
+//				if (sprites[frameIndex] == null) {
+//					pp = "PP_small";
+//
+//				} else {
+//					pp = "pp_LONG";
+//				}
+//				System.out.println("\n" + pp);
 
 				// set frame
 				BufferedImage frame = this.sprites[frameIndex];

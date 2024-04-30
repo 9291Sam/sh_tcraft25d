@@ -24,6 +24,7 @@ public class Shitcraft {
 	private ShitHut testSquare;
 	private WorldManager worldManager;
 	private WorldEntityManager worldEntityManager;
+	private PlayerColissionTracker colissionTracker;
 	private PlayerManager playerManager;
 	private UIManager UIManager;
 	private Inventory inventory;
@@ -83,6 +84,7 @@ public class Shitcraft {
 		renderer.register(new WeakReference<Entity>(this.worldEntityManager));
 		
 		this.worldEntityManager.registerWorldEntity(new ZombieSpawner(this.worldEntityManager, new Vec2(5.0, 0.0), (i) -> {this.inventory.addCoins(i); return true;}));
+		this.worldEntityManager.registerWorldEntity(new PlayerColissionTracker(this.playerManager, this.UIManager));
 	}
 
 	private static class ShitHut implements Renderer.Entity {
