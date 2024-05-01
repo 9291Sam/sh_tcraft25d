@@ -10,14 +10,25 @@ public class Utils
 {
 	public static Image loadImage(String filePath) 
 	{
-		File file = new File(filePath);
+		Image i = null; 
 		
-		try {
-			return ImageIO.read(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return(null);
+		try
+		{
+			i = ImageIO.read(new File(filePath));
 		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		
+		if (i == null)
+		{
+			System.out.printf("Failed to load %s\n", filePath);
+			
+			throw new RuntimeException("Failed to load image" + filePath);
+		}
+		
+		return i;
 	}
 	
 	public static double map(double x, double in_min, double in_max, double out_min, double out_max)

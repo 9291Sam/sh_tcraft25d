@@ -3,6 +3,7 @@ package com.sebs.shtcraft_25d;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.lang.ref.WeakReference;
@@ -159,6 +160,14 @@ public class Renderer extends JPanel implements KeyListener {
 	public boolean shouldClose() {
 		return this.shouldClose;
 	}
+	
+	public void _Kill()
+	{
+		this.killScreen = new KillScreen();
+		this.register(new WeakReference<Entity>(this.killScreen));
+	}
+	
+	KillScreen killScreen = null;
 
 	
 
@@ -174,6 +183,7 @@ public class Renderer extends JPanel implements KeyListener {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 
+		
 		while (!renderer.shouldClose()) {
 			synchronized (renderer.entities) {
 				renderer.tickAndDraw();
@@ -185,6 +195,27 @@ public class Renderer extends JPanel implements KeyListener {
 		}
 	}
 
-	private static void retainer(Object o) {
+	private static void retainer(Object o) {}
+	
+	private static class KillScreen implements Renderer.Entity
+	{
+		Image gameOver;
+		
+		public KillScreen()
+		{
+			this.gameOver = Utils.loadImage("game_over.jpg");
+		}
+
+		@Override
+		public void tick(double deltaTime) {}
+
+		@Override
+		public void draw(DrawCallCollector d)
+		{
+			
+			d.drawFilledRectangleScreen(0.0, 0.0, 100, 1.0, 1.0, Color.black);
+			d.drawTexturedRectangleScreen(0.0, 0.15, 101, 1.0, 7 / 10.0, this.gameOver);
+		}
+		
 	}
 }
