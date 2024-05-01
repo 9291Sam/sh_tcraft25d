@@ -15,7 +15,7 @@ public class Inventory implements Renderer.Entity{
 	private Image gold1;
 	private Image gold2;
 	private Image gold3;
-	private double lvMulti;
+	private static double lvMulti;
 	private int currentGold;
 	private double currentMulti;
 
@@ -54,6 +54,7 @@ public class Inventory implements Renderer.Entity{
 			d.drawTexturedRectangleScreen(0.8, 0.9, 2, 0.1, 0.1, this.level2);
 			d.drawTexturedRectangleScreen(0.9, 0.8, 2, 0.1, 0.1, this.gold2);
 		} else {
+			lvMulti = 1;
 			d.drawTexturedRectangleScreen(0.77, 0.77, 2, 0.35, 0.35, this.blaster3);
 			d.drawTexturedRectangleScreen(0.8, 0.9, 2, 0.1, 0.1, this.level3);
 			d.drawTexturedRectangleScreen(0.9, 0.8, 2, 0.1, 0.1, this.gold3); 
@@ -68,6 +69,22 @@ public class Inventory implements Renderer.Entity{
 	public void addCoins(int num) {
 		this.currentGold += num;
 	}
+	
+	public static double getLevel() {
+		try {
+			if (lvMulti == 0.1) {
+				return 1.0;
+			} else if (lvMulti == 0.01) {
+				return 3.0;
+			} else if (lvMulti == 1){
+				return 5.0;
+			} 
+			return 1;
+		} catch (Exception e) {
+			return 0;
+		}
+	}
+	
 	private double getCurrentMulti(double currentMulti) {
 		double num = 0;
 		if (currentMulti == 0.1) {

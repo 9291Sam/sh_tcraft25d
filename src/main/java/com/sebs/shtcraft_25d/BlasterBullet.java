@@ -7,6 +7,7 @@ import glm.vec._2.Vec2;
 public class BlasterBullet extends WorldEntity
 {
 	private double timeAlive = 0.0;
+	private double level = 0;
 	private final Vec2 origin;
 	private final Vec2 dir;
 	private static final double duration = 5.0;
@@ -30,7 +31,7 @@ public class BlasterBullet extends WorldEntity
 
 	public BlasterBullet(Vec2 position_, Vec2 dir_)
 	{
-		super(BlasterBullet.getBlasterImage(), position_, 0.25);
+		super(BlasterBullet.getBlasterImage(), position_, 0.25 * Inventory.getLevel());
 		
 		this.origin = new Vec2(this.position);
 		this.dir = new Vec2(dir_.x, dir_.y).normalize();
