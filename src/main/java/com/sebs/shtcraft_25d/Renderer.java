@@ -171,7 +171,7 @@ public class Renderer extends JPanel implements KeyListener {
 	}
 	
 	public void _Kill()
-	{
+	{		
 		this.killScreen = new KillScreen();
 		this.register(new WeakReference<Entity>(this.killScreen));
 	}
