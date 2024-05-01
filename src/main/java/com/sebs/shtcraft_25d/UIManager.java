@@ -18,75 +18,36 @@ public class UIManager implements Renderer.Entity
     double percent = 1.0;
     int rand = (int) Math.random() * 100;
     int checker = 0;
+    AudioManager audioManager;
     
-    public UIManager(Renderer renderer)
+    boolean triggered = false;
+    
+    public UIManager(Renderer renderer, AudioManager audioManager_)
     {
-        this.renderer = renderer;   
+        this.renderer = renderer;  
+        this.audioManager = audioManager_;
     }
     
     @Override
     public void tick(double deltaTime) {
     	if (this.percent <= 0) {
+    		
+    		if (!this.triggered)
+    		{
+    			this.audioManager.stopAll();
+    		}
+    		
+    		this.triggered = true;
     		run = false;
     		if (rand == 1) {
-    			File f = new File("[shylily]-womp-womp-sound-effect-made-with-Voicemod.wav");
-    		    AudioInputStream audioIn = null;
-    			try {
-    				audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
-    			} catch (MalformedURLException e) {
-    				// TODO Auto-generated catch block
-    				e.printStackTrace();
-    			} catch (UnsupportedAudioFileException e) {
-    				// TODO Auto-generated catch block
-    				e.printStackTrace();
-    			} catch (IOException e) {
-    				// TODO Auto-generated catch block
-    				e.printStackTrace();
-    			}  
-    		    Clip clip = null;
-    			try {
-    				clip = AudioSystem.getClip();
-    			} catch (LineUnavailableException e) {
-    				// TODO Auto-generated catch block
-    				e.printStackTrace();
-    			}
-    		    try {
-    				clip.open(audioIn);
-    			} catch (LineUnavailableException | IOException e) {
-    				// TODO Auto-generated catch block
-    				e.printStackTrace();
-    			}
+    			this.audioManager.playSound("[shylily]-womp-womp-sound-effect-made-with-Voicemod.wav");
     		} else {
-    			File f = new File("womp-womp-womp-made-with-Voicemod.wav");
-    		    AudioInputStream audioIn = null;
-    			try {
-    				audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
-    			} catch (MalformedURLException e) {
-    				// TODO Auto-generated catch block
-    				e.printStackTrace();
-    			} catch (UnsupportedAudioFileException e) {
-    				// TODO Auto-generated catch block
-    				e.printStackTrace();
-    			} catch (IOException e) {
-    				// TODO Auto-generated catch block
-    				e.printStackTrace();
-    			}  
-    		    Clip clip = null;
-    			try {
-    				clip = AudioSystem.getClip();
-    			} catch (LineUnavailableException e) {
-    				// TODO Auto-generated catch block
-    				e.printStackTrace();
-    			}
-    		    try {
-    				clip.open(audioIn);
-    			} catch (LineUnavailableException | IOException e) {
-    				// TODO Auto-generated catch block
-    				e.printStackTrace();
-    			}
-    		    checker++;
+    			this.audioManager.playSound("womp-womp-womp-made-with-Voicemod.wav");
     		}
+    		
+        	this.renderer._Kill();
     	}
+    	
     }
     
     public void increaseByPercent(double p)

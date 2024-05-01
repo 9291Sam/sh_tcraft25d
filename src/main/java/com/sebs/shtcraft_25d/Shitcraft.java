@@ -28,15 +28,17 @@ public class Shitcraft {
 	private PlayerManager playerManager;
 	private UIManager UIManager;
 	private Inventory inventory;
+	private AudioManager audioManager;
 
 	public Shitcraft(Renderer renderer_) {
 		this.renderer = renderer_;
 		
 		this.worldEntityManager = new WorldEntityManager(this.renderer);
+		this.audioManager = new AudioManager();
 
 		this.testSquare = new ShitHut();
 		try {
-			this.playerManager = new PlayerManager(this.renderer, this.worldEntityManager);
+			this.playerManager = new PlayerManager(this.renderer, this.worldEntityManager, this.audioManager);
 		} catch (InputMismatchException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -45,26 +47,10 @@ public class Shitcraft {
 		
 
 		this.worldManager = new WorldManager(this.renderer);
-		this.UIManager = new UIManager(this.renderer);
+		this.UIManager = new UIManager(this.renderer, this.audioManager);
 		this.inventory = new Inventory(this.renderer);
-
-		Clip clip = null; // Declaring clip outside the snippet
-
-		if (!UIManager.run) {
-		    File f = new File("328857_NG_Rival_remix.wav");
-		    try (AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL())) {
-		        clip = AudioSystem.getClip();
-		        clip.open(audioIn);
-		        clip.start();
-		    } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
-		        e.printStackTrace();
-		    }
-		} else {
-		    if (clip != null && clip.isRunning()) { // Check if clip is initialized and is running
-		        clip.stop();
-		    }
-		}
-
+		
+		this.audioManager.playSound("328857_NG_Rival_remix.wav");
 		
 		renderer.register(new WeakReference<Entity>(this.worldManager));
 		renderer.register(new WeakReference<Entity>(this.testSquare));

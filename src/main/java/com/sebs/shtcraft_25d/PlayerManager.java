@@ -22,6 +22,7 @@ public class PlayerManager implements Renderer.Entity {
 	Renderer renderer;
 	private SpriteAnimation animations;
 	private String spriteSheet;
+	private AudioManager audioManager;
 
 	double playerX;
 	double playerY;
@@ -53,7 +54,7 @@ public class PlayerManager implements Renderer.Entity {
 		
 	}
 
-	public PlayerManager(Renderer renderer_, WorldEntityManager worldEntityManager_)
+	public PlayerManager(Renderer renderer_, WorldEntityManager worldEntityManager_, AudioManager audioManager_)
 			throws InputMismatchException, IOException, FileNotFoundException {
 		this.renderer = renderer_;
 		// start reading in animations
@@ -66,6 +67,7 @@ public class PlayerManager implements Renderer.Entity {
 		this.playerTravelDirection = new Vec2(1.0, 0.0);
 		this.lastKey = 0;
 		this.worldEntityManager = worldEntityManager_;
+		this.audioManager = audioManager_;
 	}
 
 	@Override
@@ -87,36 +89,11 @@ public class PlayerManager implements Renderer.Entity {
 
 		if (renderer.isKeyPressed(KeyEvent.VK_F)) {
 			if (!wasFireKeyPressed) {
+				
 				this.worldEntityManager
 						.registerWorldEntity(new BlasterBullet(new Vec2(playerX, playerY), this.playerTravelDirection));
-				File f = new File("pk-fire-sound-effect-made-with-Voicemod.wav");
-			    AudioInputStream audioIn = null;
-				try {
-					audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
-				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (UnsupportedAudioFileException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}  
-			    Clip clip = null;
-				try {
-					clip = AudioSystem.getClip();
-				} catch (LineUnavailableException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			    try {
-					clip.open(audioIn);
-				} catch (LineUnavailableException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			    clip.start();
+				
+				this.audioManager.playSound("pk-fire-sound-effect-made-with-Voicemod.wav");
 			}
 			wasFireKeyPressed = true;
 
