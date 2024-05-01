@@ -141,7 +141,7 @@ public class Renderer extends JPanel implements KeyListener {
     			this.cameraY += moveVector.y * cameraMoveSpeed * deltaTime;
             }
 		}
-
+		//System.out.printf("Active Renderer Entity %d\n", this.entities.size());
 		for (WeakReference<Entity> e : this.entities) {
 			Entity maybeEntity = e.get();
 
