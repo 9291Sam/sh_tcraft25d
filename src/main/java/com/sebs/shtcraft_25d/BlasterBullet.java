@@ -7,7 +7,6 @@ import glm.vec._2.Vec2;
 public class BlasterBullet extends WorldEntity
 {
 	private double timeAlive = 0.0;
-	private double level = 0;
 	private final Vec2 origin;
 	private final Vec2 dir;
 	private static final double duration = 5.0;
@@ -23,11 +22,6 @@ public class BlasterBullet extends WorldEntity
 		
 		return BlasterBullet.maybeBlasterImage;
 	}
-	
-	@Override
-	public String toString()
-	{
-		return String.format("Blaster Bullet @ %s", this.position);	}
 
 	public BlasterBullet(Vec2 position_, Vec2 dir_)
 	{
@@ -43,43 +37,39 @@ public class BlasterBullet extends WorldEntity
 		
 	}
 
-	@Override
-	public void tick(double deltaTime)
-	{
-		this.timeAlive += deltaTime;
+    // Method to update bullet's state
+    @Override
+    public void tick(double deltaTime) {
+        this.timeAlive += deltaTime; // Increment time alive
 
-		if (this.timeAlive > BlasterBullet.duration)
-		{
-			this.isAlive = false;
-		}
-		
-		Vec2 dirIntercalc = new Vec2(this.dir);
-		dirIntercalc.mul((float)BlasterBullet.speed * (float)this.timeAlive);
-		
-		Vec2 originInterCalc = new Vec2(this.origin);
-		originInterCalc.add(dirIntercalc);
-		
-		this.position = originInterCalc;
-		
-		// this is so much more readable than
-		// this.position = this.origin + this.dir * this.timeAlive;
-	}
+        // Check if bullet has exceeded its duration
+        if (this.timeAlive > BlasterBullet.duration) {
+            this.isAlive = false; // Mark bullet as dead
+        }
 
-	
+        // Calculate new position based on time and direction
+        Vec2 dirIntercalc = new Vec2(this.dir).mul((float) BlasterBullet.speed * (float) this.timeAlive);
+        Vec2 originInterCalc = new Vec2(this.origin).add(dirIntercalc);
+        this.position = originInterCalc;
+    }
 
-	@Override
-	protected ColissionType getColissionType()
-	{
-		return ColissionType.Thin;
-	}
+    // Method to get collision type of the bullet
+    @Override
+    protected ColissionType getColissionType() {
+        return ColissionType.Thin; // Thin collision type
+    }
 
-	@Override
-	protected void collissionWith(WorldEntity e)
-	{
-		if (!(e instanceof PlayerColissionTracker))
-		{
-			this.isAlive = false;
-		}
-	}
+    // Method to handle collision with other entities
+    @Override
+    protected void collissionWith(WorldEntity e) {
+        if (!(e instanceof PlayerColissionTracker)) {
+            this.isAlive = false; // Mark bullet as dead if collided with entity other than PlayerColissionTracker
+        }
+    }
 
+    // Method to get string representation of BlasterBullet
+    @Override
+    public String toString() {
+        return String.format("Blaster Bullet @ %s", this.position);
+    }
 }

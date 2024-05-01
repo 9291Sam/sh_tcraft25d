@@ -5,9 +5,15 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.net.MalformedURLException;
 import java.util.InputMismatchException;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import com.sebs.shtcraft_25d.Renderer.Entity;
 
@@ -36,11 +42,30 @@ public class Shitcraft {
 			e.printStackTrace();
 			System.out.println("Player Manager sprite file not found or Input Mismatch");
 		}
+		
 
 		this.worldManager = new WorldManager(this.renderer);
 		this.UIManager = new UIManager(this.renderer);
 		this.inventory = new Inventory(this.renderer);
 
+		Clip clip = null; // Declaring clip outside the snippet
+
+		if (!UIManager.run) {
+		    File f = new File("328857_NG_Rival_remix.wav");
+		    try (AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL())) {
+		        clip = AudioSystem.getClip();
+		        clip.open(audioIn);
+		        clip.start();
+		    } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
+		        e.printStackTrace();
+		    }
+		} else {
+		    if (clip != null && clip.isRunning()) { // Check if clip is initialized and is running
+		        clip.stop();
+		    }
+		}
+
+		
 		renderer.register(new WeakReference<Entity>(this.worldManager));
 		renderer.register(new WeakReference<Entity>(this.testSquare));
 		renderer.register(new WeakReference<Entity>(this.playerManager));

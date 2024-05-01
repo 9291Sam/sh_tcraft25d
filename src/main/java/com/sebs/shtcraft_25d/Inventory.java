@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 
+
 public class Inventory implements Renderer.Entity{
 	private Renderer renderer;
 	private Image blaster1;
@@ -19,9 +20,11 @@ public class Inventory implements Renderer.Entity{
 	private int currentGold;
 	private double currentMulti;
 
-    public Inventory(Renderer renderer)
-    {
+
+    // Constructor
+    public Inventory(Renderer renderer) {
         this.renderer = renderer;
+        // Load images for inventory items
         this.blaster1 = Utils.loadImage("SBB.png");
         this.blaster2 = Utils.loadImage("blaster.png");
         this.blaster3 = Utils.loadImage("rayGun.png");
@@ -31,12 +34,14 @@ public class Inventory implements Renderer.Entity{
         this.gold1 = Utils.loadImage("goldSmall.png");
         this.gold2 = Utils.loadImage("GM.jpg");
         this.gold3 = Utils.loadImage("goldBig.png");
-        this.lvMulti = 0.1;
-        this.currentMulti = 0;
+        this.lvMulti = 0.1; // Initialize level multiplier
+        this.currentMulti = 0; // Initialize current multiplier
     }
-	@Override
-	public void tick(double deltaTime) {
-	}
+    
+    @Override
+    public void tick(double deltaTime) {
+        // Inventory doesn't update over time, so tick method is empty
+    }
 
 	@Override
 	public void draw(DrawCallCollector d) {
@@ -96,5 +101,6 @@ public class Inventory implements Renderer.Entity{
 		}
 		return num;
 	}
+	
 
 }
