@@ -43,39 +43,29 @@ public class Shitcraft {
 			System.out.println("Player Manager sprite file not found or Input Mismatch");
 		}
 		
-		File f = new File("328857_NG_Rival_remix.wav");
-	    AudioInputStream audioIn = null;
-		try {
-			audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnsupportedAudioFileException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}  
-	    Clip clip = null;
-		try {
-			clip = AudioSystem.getClip();
-		} catch (LineUnavailableException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    try {
-			clip.open(audioIn);
-		} catch (LineUnavailableException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    clip.start();
 
 		this.worldManager = new WorldManager(this.renderer);
 		this.UIManager = new UIManager(this.renderer);
 		this.inventory = new Inventory(this.renderer);
 
+		Clip clip = null; // Declaring clip outside the snippet
+
+		if (!UIManager.run) {
+		    File f = new File("328857_NG_Rival_remix.wav");
+		    try (AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL())) {
+		        clip = AudioSystem.getClip();
+		        clip.open(audioIn);
+		        clip.start();
+		    } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
+		        e.printStackTrace();
+		    }
+		} else {
+		    if (clip != null && clip.isRunning()) { // Check if clip is initialized and is running
+		        clip.stop();
+		    }
+		}
+
+		
 		renderer.register(new WeakReference<Entity>(this.worldManager));
 		renderer.register(new WeakReference<Entity>(this.testSquare));
 		renderer.register(new WeakReference<Entity>(this.playerManager));

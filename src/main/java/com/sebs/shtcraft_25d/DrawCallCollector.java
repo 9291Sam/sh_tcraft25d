@@ -9,110 +9,119 @@ import java.util.function.Function;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class DrawCallCollector {
-	private Graphics g;
-	private double cameraX, cameraY;
-	private double cameraWidth, cameraHeight;
-	private double screenPxX, screenPxY;
-	private ArrayList<Pair<Integer, Function<Graphics, Boolean>>> functions;
+    private Graphics g; // Graphics object to draw on
+    private double cameraX, cameraY; // Camera position in world coordinates
+    private double cameraWidth, cameraHeight; // Camera dimensions
+    private double screenPxX, screenPxY; // Screen dimensions in pixels
+    private ArrayList<Pair<Integer, Function<Graphics, Boolean>>> functions; // List of draw functions
 
-	public DrawCallCollector(Graphics newG, double newCameraX, double newCameraY, double newCameraWidth,
-			double newCameraHeight, double newScreenPxX, double newScreenPxY) {
-		this.g = newG;
-		this.cameraX = newCameraX;
-		this.cameraY = newCameraY;
-		this.cameraWidth = newCameraWidth;
-		this.cameraHeight = newCameraHeight;
-		this.screenPxX = newScreenPxX;
-		this.screenPxY = newScreenPxY;
+    // Constructor
+    public DrawCallCollector(Graphics newG, double newCameraX, double newCameraY, double newCameraWidth,
+            double newCameraHeight, double newScreenPxX, double newScreenPxY) {
+        this.g = newG;
+        this.cameraX = newCameraX;
+        this.cameraY = newCameraY;
+        this.cameraWidth = newCameraWidth;
+        this.cameraHeight = newCameraHeight;
+        this.screenPxX = newScreenPxX;
+        this.screenPxY = newScreenPxY;
 
-		this.functions = new ArrayList<>();
-	}
+        this.functions = new ArrayList<>(); // Initialize list of draw functions
+    }
 
-	// TODO: make *World and *ScreenSpace
-	// takes in normalized coordinates
-	public void drawFilledRectangleScreen(double xScreen, double yScreen, Integer layer, double width,
-			double height, Color color) {
-		Function<Graphics, Boolean> f = (Graphics g) -> {
-			g.setColor(color);
-			g.fillRect((int) (xScreen * this.screenPxX), (int) (yScreen * this.screenPxY),
-					(int) (width * this.screenPxX), (int) (height * this.screenPxY));
+    // Method to draw a filled rectangle in screen space
+    public void drawFilledRectangleScreen(double xScreen, double yScreen, Integer layer, double width,
+            double height, Color color) {
+        // Create a draw function and add it to the list
+        Function<Graphics, Boolean> f = (Graphics g) -> {
+            g.setColor(color);
+            g.fillRect((int) (xScreen * this.screenPxX), (int) (yScreen * this.screenPxY),
+                    (int) (width * this.screenPxX), (int) (height * this.screenPxY));
 
-			return true;
-		};
+            return true;
+        };
 
-		this.functions.add(Pair.of(layer, f));
-	}
+        this.functions.add(Pair.of(layer, f)); // Add draw function to the list
+    }
 
-	public void drawTexturedRectangleScreen(double xScreen, double yScreen, Integer layer, double width,
-			double height, Image img) {
-		Function<Graphics, Boolean> f = (Graphics g) -> {
-			g.drawImage(img, (int) (xScreen * this.screenPxX), (int) (yScreen * this.screenPxY),
-					(int) (width * this.screenPxX), (int) (height * this.screenPxY), null);
+    // Method to draw a textured rectangle in screen space
+    public void drawTexturedRectangleScreen(double xScreen, double yScreen, Integer layer, double width,
+            double height, Image img) {
+        // Create a draw function and add it to the list
+        Function<Graphics, Boolean> f = (Graphics g) -> {
+            g.drawImage(img, (int) (xScreen * this.screenPxX), (int) (yScreen * this.screenPxY),
+                    (int) (width * this.screenPxX), (int) (height * this.screenPxY), null);
 
-			return true;
-		};
+            return true;
+        };
 
-		this.functions.add(Pair.of(layer, f));
-	}
+        this.functions.add(Pair.of(layer, f)); // Add draw function to the list
+    }
 
-	public void drawFilledRectangleWorld(double xWorld, double yWorld, Integer layer, double width, double height,
-			Color color) {
-		double xScreenPx = Utils.map(xWorld - this.cameraX, -this.cameraWidth / 2, this.cameraWidth / 2, 0.0,
-				this.screenPxX);
-		double yScreenPx = Utils.map(yWorld - this.cameraY, this.cameraHeight / 2, -this.cameraHeight / 2, 0.0,
-				this.screenPxY);
+    // Method to draw a filled rectangle in world space
+    public void drawFilledRectangleWorld(double xWorld, double yWorld, Integer layer, double width, double height,
+            Color color) {
+        // Convert world coordinates to screen coordinates
+        double xScreenPx = Utils.map(xWorld - this.cameraX, -this.cameraWidth / 2, this.cameraWidth / 2, 0.0,
+                this.screenPxX);
+        double yScreenPx = Utils.map(yWorld - this.cameraY, this.cameraHeight / 2, -this.cameraHeight / 2, 0.0,
+                this.screenPxY);
 
-		double widthPx = this.screenPxX * width / this.cameraWidth;
-		double heightPx = this.screenPxY * height / this.cameraHeight;
+        double widthPx = this.screenPxX * width / this.cameraWidth;
+        double heightPx = this.screenPxY * height / this.cameraHeight;
 
-		if (xScreenPx <= -widthPx || xScreenPx >= this.screenPxX || yScreenPx <= -heightPx
-				|| yScreenPx >= this.screenPxY) {
-			return;
-		}
+        // Check if rectangle is outside the screen
+        if (xScreenPx <= -widthPx || xScreenPx >= this.screenPxX || yScreenPx <= -heightPx
+                || yScreenPx >= this.screenPxY) {
+            return; // If outside, do not draw
+        }
 
-		// thank you java very cool, I love not having ZSTs
-		Function<Graphics, Boolean> f = (Graphics g) -> {
-			g.setColor(color);
-			g.fillRect((int) xScreenPx, (int) yScreenPx, (int) widthPx, (int) heightPx);
+        // Create a draw function and add it to the list
+        Function<Graphics, Boolean> f = (Graphics g) -> {
+            g.setColor(color);
+            g.fillRect((int) xScreenPx, (int) yScreenPx, (int) widthPx, (int) heightPx);
 
-			return true;
-		};
+            return true;
+        };
 
-		this.functions.add(Pair.of(layer, f));
-	}
+        this.functions.add(Pair.of(layer, f)); // Add draw function to the list
+    }
 
-	public void drawTexturedRectangleWorld(double xWorld, double yWorld, Integer layer, double width, double height,
-			Image img) {
-		double xScreenPx = Utils.map(xWorld - this.cameraX, -this.cameraWidth / 2, this.cameraWidth / 2, 0.0,
-				this.screenPxX);
-		double yScreenPx = Utils.map(yWorld - this.cameraY, this.cameraHeight / 2, -this.cameraHeight / 2, 0.0,
-				this.screenPxY);
+    // Method to draw a textured rectangle in world space
+    public void drawTexturedRectangleWorld(double xWorld, double yWorld, Integer layer, double width, double height,
+            Image img) {
+        // Convert world coordinates to screen coordinates
+        double xScreenPx = Utils.map(xWorld - this.cameraX, -this.cameraWidth / 2, this.cameraWidth / 2, 0.0,
+                this.screenPxX);
+        double yScreenPx = Utils.map(yWorld - this.cameraY, this.cameraHeight / 2, -this.cameraHeight / 2, 0.0,
+                this.screenPxY);
 
-		double widthPx = this.screenPxX * width / this.cameraWidth;
-		double heightPx = this.screenPxY * height / this.cameraHeight;
+        double widthPx = this.screenPxX * width / this.cameraWidth;
+        double heightPx = this.screenPxY * height / this.cameraHeight;
 
-		if (xScreenPx <= -widthPx || xScreenPx >= this.screenPxX || yScreenPx <= -heightPx
-				|| yScreenPx >= this.screenPxY) {
-			return;
-		}
+        // Check if rectangle is outside the screen
+        if (xScreenPx <= -widthPx || xScreenPx >= this.screenPxX || yScreenPx <= -heightPx
+                || yScreenPx >= this.screenPxY) {
+            return; // If outside, do not draw
+        }
 
-		Function<Graphics, Boolean> f = (Graphics g) -> {
-			this.g.drawImage(img, (int) xScreenPx, (int) yScreenPx, (int) widthPx, (int) heightPx, null);
+        // Create a draw function and add it to the list
+        Function<Graphics, Boolean> f = (Graphics g) -> {
+            this.g.drawImage(img, (int) xScreenPx, (int) yScreenPx, (int) widthPx, (int) heightPx, null);
 
-			return true;
-		};
+            return true;
+        };
 
-		this.functions.add(Pair.of(layer, f));
-	}
+        this.functions.add(Pair.of(layer, f)); // Add draw function to the list
+    }
 
-	public void dispatch() {
-		this.functions.sort((l, r) -> l.getLeft().compareTo(r.getLeft()));
+    // Method to dispatch draw functions
+    public void dispatch() {
+        this.functions.sort((l, r) -> l.getLeft().compareTo(r.getLeft())); // Sort draw functions by layer
 
-		for (Pair<Integer, Function<Graphics, Boolean>> f : this.functions) {
-			Function<Graphics, Boolean> func = f.getRight();
-
-			func.apply(this.g);
-		}
-	}
-
+        for (Pair<Integer, Function<Graphics, Boolean>> f : this.functions) {
+            Function<Graphics, Boolean> func = f.getRight(); // Get draw function
+            func.apply(this.g); // Execute draw function
+        }
+    }
 }

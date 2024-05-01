@@ -151,6 +151,7 @@ public class Renderer extends JPanel implements KeyListener {
 
 		nanosPrev = now;
 
+
 		this.repaint();
 	}
 
