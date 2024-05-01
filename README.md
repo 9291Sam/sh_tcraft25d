@@ -5,7 +5,7 @@
 This project is a java game that is a fun mini shooter based off of the pixel art style of minecraft. The player controlled character is spawned in a shitHut on a randomly generated world. Using their special ability "PK Fire", they eradicate zombies that spawn near them. The more they kill, the more their ability levels up and gets larger. If the character takes too much damage from the zombies, the game ends and fades to a game over screen. 
 
 ## Demo Video
-[https://youtu.be/rwxuwDfDcV0](demo_video)
+[https://youtu.be/rwxuwDfDcV0](https://youtu.be/rwxuwDfDcV0)
 
 ## Credits
 - Monsol Cole-Kweli
