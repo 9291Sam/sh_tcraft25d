@@ -84,9 +84,9 @@ public class Inventory implements Renderer.Entity{
 			} else if (lvMulti == 1){
 				return 5.0;
 			} 
-			return 1;
+			return 1.0;
 		} catch (Exception e) {
-			return 0;
+			return 0.0;
 		}
 	}
 	
